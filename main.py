@@ -75,21 +75,21 @@ def create_pieces():
 
     # Black Pawn setup
     for i in range(8):
-        piece = Piece("black", possible_columns[i], 7, Rank(1), 0)
+        piece = Piece.Piece("black", possible_columns[i], 7, Rank.Rank(1), 0)
         pieces.append(piece)
     # Black Queen setup
-    pieces.append(Piece("black", "d", 8, Rank(5), 0))
+    pieces.append(Piece.Piece("black", "d", 8, Rank.Rank(5), 0))
     # Black King setup
-    pieces.append(Piece("black", "e", 8, Rank(6), 0))
+    pieces.append(Piece.Piece("black", "e", 8, Rank.Rank(6), 0))
 
     # White Pawn setup
     for i in range(8):
-        piece = Piece("white", possible_columns[i], 2, Rank(1), 0)
+        piece = Piece.Piece("white", possible_columns[i], 2, Rank.Rank(1), 0)
         pieces.append(piece)
     # White Queen setup
-    pieces.append(Piece("white", "d", 1, Rank(5), 0))
+    pieces.append(Piece.Piece("white", "d", 1, Rank.Rank(5), 0))
     # White King setup
-    pieces.append(Piece("white", "e", 1, Rank(6), 0))
+    pieces.append(Piece.Piece("white", "e", 1, Rank.Rank(6), 0))
 
     return pieces
 
@@ -103,7 +103,7 @@ def two_of_a_kind_pieces(colour, x_coordinate, y_coordinate, rank):
     :param int rank: Rank of the piece, defined in the Rank enum.
     :return:piece object defined by the given arguments.
     """
-    piece = Piece(colour, x_coordinate, y_coordinate, Rank(rank), 0)
+    piece = Piece.Piece(colour, x_coordinate, y_coordinate, Rank.Rank(rank), 0)
     return piece
 
 
@@ -325,7 +325,14 @@ if __name__ == '__main__':
     initial_position_grid = reset_pieces(grid)
     print(initial_position_grid)
     pieces = create_pieces()
-    for piece in pieces:
-        all_other_pieces = [p for p in pieces if p.x_position != piece.x_position or p.y_position != piece.y_position]
 
-        pawn_movement = pawn_movement(all_other_pieces, piece)
+    all_pawns = []
+    for piece in pieces:
+        if piece.rank == Rank.Rank.pawn:
+            all_pawns.append(piece)
+
+        all_other_pawns = [p for p in all_pawns if p.x_position != piece.x_position or p.y_position != piece.y_position]
+
+        if piece.rank == Rank.Rank.pawn:
+            moves = pawn_movement(all_other_pawns, piece)
+
