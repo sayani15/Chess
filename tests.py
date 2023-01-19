@@ -194,32 +194,100 @@ class GetPawnMovementTestCases(unittest.TestCase):
         self.assertEqual(len(expected_result), len(result))
         self.assertSequenceEqual(sorted(expected_result), sorted(result))
 
+    def test_move_up_while_in_row_8(self):  # doesnt know not to go off board
+        piece = Piece.Piece("white", "d", 8, Rank.Rank(1), 0)
+        pieces = []
+
+        result = main.pawn_movement(pieces, piece)
+
+        self.assertEqual(result, [])
+
+    def test_move_down_while_in_row_1(self):  # doesnt know not to go off board
+        piece = Piece.Piece("black", "d", 1, Rank.Rank(1), 0)
+        pieces = []
+
+        result = main.pawn_movement(pieces, piece)
+
+        self.assertEqual(result, [])
+
 
 class GetRookMovementTestCases(unittest.TestCase):
-    def test_move_upwards_in_empty_board_black(self):
-        piece = Piece.Piece("black", "d", 4, Rank.Rank(4), 0)
+    def test_move_in_empty_board(self):
+        piece = Piece.Piece("white", "d", 4, Rank.Rank(4), 0)
 
         result = main.rook_movement([], piece)
 
-        self.assertEqual(sorted(["d5", "d6", "d7", "d8"]), sorted(result))
+        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "d7", "d8", "e4", "f4", "g4", "h4"]), sorted(result))
 
-    def test_move_upwards_with_upwards_black_blocked_by_black(self):
+    def test_move_with_upwards_black_blocked_by_black(self):
         piece = Piece.Piece("black", "d", 4, Rank.Rank(4), 0)
 
         pieces = []
         pieces.append(Piece.Piece("black", "d", 7, Rank.Rank(4), 0))
         result = main.rook_movement(pieces, piece)
 
-        self.assertEqual(sorted(["d5", "d6"]), sorted(result))
+        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "e4", "f4", "g4", "h4"]), sorted(result))
 
-    def test_move_upwards_with_upwards_white_in_path_of_black(self):
+    def test_move_with_upwards_white_in_path_of_black(self):
         piece = Piece.Piece("black", "d", 4, Rank.Rank(4), 0)
 
         pieces = []
         pieces.append(Piece.Piece("white", "d", 7, Rank.Rank(4), 0))
         result = main.rook_movement(pieces, piece)
 
-        self.assertEqual(sorted(["d5", "d6", "d7"]), sorted(result))
+        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "d7", "e4", "f4", "g4", "h4"]), sorted(result))
+
+
+class GetBishopMovementTestCases(unittest.TestCase):
+    def test_move_in_empty_board(self):
+        piece = Piece.Piece("white", "e", 4, Rank.Rank(3), 0)
+
+        pieces = []
+        result = main.bishop_movement(pieces, piece)
+
+
+class GetKingMovementTestCases(unittest.TestCase):
+    def test_move_in_empty_board_from_middle_white(self):
+        piece = Piece.Piece("white", "e", 4, Rank.Rank(6), 0)
+
+        result = main.king_movement([], piece)
+
+        self.assertEqual(sorted(["e5", "e3", "d4", "f4", "f3", "d3", "f5", "d5"]), sorted(result))
+
+    def test_move_in_empty_board_from_middle_black(self):
+        piece = Piece.Piece("black", "e", 4, Rank.Rank(6), 0)
+
+        result = main.king_movement([], piece)
+
+        self.assertEqual(sorted(["e5", "e3", "d4", "f4", "f3", "d3", "f5", "d5"]), sorted(result))
+
+    def test_move_in_empty_board_from_1(self):   # this fails because it doesnt know to not go off the board
+        piece = Piece.Piece("white", "e", 1, Rank.Rank(6), 0)
+
+        result = main.king_movement([], piece)
+
+        self.assertEqual(sorted(["e2", "d2", "f2", "d1", "f1"]), sorted(result))
+
+    def test_move_in_empty_board_from_8(self):   # this fails because it doesnt know to not go off the board
+            piece = Piece.Piece("black", "e", 8, Rank.Rank(6), 0)
+
+            result = main.king_movement([], piece)
+
+            self.assertEqual(sorted(["e7", "d7", "f7", "d8", "f8"]), sorted(result))
+
+    def test_move_in_empty_board_from_a(self):  # is supposed to throw an error (which i disagree with)
+                piece = Piece.Piece("black", "a", 5, Rank.Rank(6), 0)
+
+                result = main.king_movement([], piece)
+
+                self.assertEqual(sorted(["a5", "a3", "b3", "b4", "b5"]), sorted(result))
+
+    def test_move_in_empty_board_from_h(self):  # is supposed to throw an error (which i disagree with)
+                    piece = Piece.Piece("black", "a", 5, Rank.Rank(6), 0)
+
+                    result = main.king_movement([], piece)
+
+                    self.assertEqual(sorted(["a5", "a3", "b3", "b4", "b5"]), sorted(result))
 
 
 if __name__ == '__main__':
