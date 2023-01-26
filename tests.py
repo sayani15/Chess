@@ -208,7 +208,7 @@ class GetPawnMovementTestCases(unittest.TestCase):
 
         result = main.pawn_movement(pieces, piece)
 
-        self.assertEqual(result, [])
+        self.assertEqual([], result)
 
 
 class GetRookMovementTestCases(unittest.TestCase):
@@ -244,6 +244,39 @@ class GetBishopMovementTestCases(unittest.TestCase):
 
         pieces = []
         result = main.bishop_movement(pieces, piece)
+        expected_result = ["d3", "c2", "b1", "f5", "g6", "h7", "d5", "c6", "b7", "a8", "f3", "g2", "h1"]
+
+        self.assertEqual(len(expected_result), len(result))
+        self.assertSequenceEqual(sorted(expected_result), sorted(result))
+
+    def test_one_move_available(self):
+        piece = Piece.Piece("white", "e", 4, Rank.Rank(3), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("white", "d", 3, Rank.Rank(5), 0))
+        pieces.append(Piece.Piece("white", "d", 5, Rank.Rank(5), 0))
+        pieces.append(Piece.Piece("white", "f", 3, Rank.Rank(5), 0))
+        pieces.append(Piece.Piece("black", "f", 5, Rank.Rank(5), 0))
+
+        result = main.bishop_movement(pieces, piece)
+        expected_result = ["f5"]
+
+        self.assertEqual(len(expected_result), len(result))
+        self.assertSequenceEqual(sorted(expected_result), sorted(result))
+
+    def test_one_direction_available(self):
+        piece = Piece.Piece("white", "e", 4, Rank.Rank(3), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("white", "d", 5, Rank.Rank(5), 0))
+        pieces.append(Piece.Piece("white", "f", 3, Rank.Rank(5), 0))
+        pieces.append(Piece.Piece("white", "f", 5, Rank.Rank(5), 0))
+
+        result = main.bishop_movement(pieces, piece)
+        expected_result = ["d3", "c2", "b1"]
+
+        self.assertEqual(len(expected_result), len(result))
+        self.assertSequenceEqual(sorted(expected_result), sorted(result))
 
 
 class GetKingMovementTestCases(unittest.TestCase):
@@ -261,33 +294,48 @@ class GetKingMovementTestCases(unittest.TestCase):
 
         self.assertEqual(sorted(["e5", "e3", "d4", "f4", "f3", "d3", "f5", "d5"]), sorted(result))
 
-    def test_move_in_empty_board_from_1(self):   # this fails because it doesnt know to not go off the board
+    def test_move_in_empty_board_from_1(self):
         piece = Piece.Piece("white", "e", 1, Rank.Rank(6), 0)
 
         result = main.king_movement([], piece)
 
         self.assertEqual(sorted(["e2", "d2", "f2", "d1", "f1"]), sorted(result))
 
-    def test_move_in_empty_board_from_8(self):   # this fails because it doesnt know to not go off the board
+    def test_move_in_empty_board_from_8(self):
             piece = Piece.Piece("black", "e", 8, Rank.Rank(6), 0)
 
             result = main.king_movement([], piece)
 
             self.assertEqual(sorted(["e7", "d7", "f7", "d8", "f8"]), sorted(result))
 
-    def test_move_in_empty_board_from_a(self):  # is supposed to throw an error (which i disagree with)
-                piece = Piece.Piece("black", "a", 5, Rank.Rank(6), 0)
+    def test_move_in_empty_board_from_a(self):
+        piece = Piece.Piece("black", "a", 4, Rank.Rank(6), 0)
 
-                result = main.king_movement([], piece)
+        result = main.king_movement([], piece)
 
-                self.assertEqual(sorted(["a5", "a3", "b3", "b4", "b5"]), sorted(result))
+        self.assertEqual(sorted(["a5", "a3", "b3", "b4", "b5"]), sorted(result))
 
-    def test_move_in_empty_board_from_h(self):  # is supposed to throw an error (which i disagree with)
-                    piece = Piece.Piece("black", "a", 5, Rank.Rank(6), 0)
+    def test_move_in_empty_board_from_h(self):
+        piece = Piece.Piece("black", "a", 5, Rank.Rank(6), 0)
 
-                    result = main.king_movement([], piece)
+        result = main.king_movement([], piece)
 
-                    self.assertEqual(sorted(["a5", "a3", "b3", "b4", "b5"]), sorted(result))
+        self.assertEqual(sorted(["a4", "a6", "b4", "b5", "b6"]), sorted(result))
+
+    def test_1_move_available(self):
+        piece = Piece.Piece("black", "d", 5, Rank.Rank(6), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("black", "d", 6, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "d", 4, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "e", 5, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "c", 5, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "e", 4, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "c", 4, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "e", 6, Rank.Rank(6), 0))
+        result = main.king_movement(pieces, piece)
+
+        self.assertEqual(sorted(["c6"]), sorted(result))
 
 
 if __name__ == '__main__':
