@@ -211,33 +211,6 @@ class GetPawnMovementTestCases(unittest.TestCase):
         self.assertEqual([], result)
 
 
-class GetRookMovementTestCases(unittest.TestCase):
-    def test_move_in_empty_board(self):
-        piece = Piece.Piece("white", "d", 4, Rank.Rank(4), 0)
-
-        result = main.rook_movement([], piece)
-
-        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "d7", "d8", "e4", "f4", "g4", "h4"]), sorted(result))
-
-    def test_move_with_upwards_black_blocked_by_black(self):
-        piece = Piece.Piece("black", "d", 4, Rank.Rank(4), 0)
-
-        pieces = []
-        pieces.append(Piece.Piece("black", "d", 7, Rank.Rank(4), 0))
-        result = main.rook_movement(pieces, piece)
-
-        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "e4", "f4", "g4", "h4"]), sorted(result))
-
-    def test_move_with_upwards_white_in_path_of_black(self):
-        piece = Piece.Piece("black", "d", 4, Rank.Rank(4), 0)
-
-        pieces = []
-        pieces.append(Piece.Piece("white", "d", 7, Rank.Rank(4), 0))
-        result = main.rook_movement(pieces, piece)
-
-        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "d7", "e4", "f4", "g4", "h4"]), sorted(result))
-
-
 class GetBishopMovementTestCases(unittest.TestCase):
     def test_move_in_empty_board(self):
         piece = Piece.Piece("white", "e", 4, Rank.Rank(3), 0)
@@ -277,6 +250,66 @@ class GetBishopMovementTestCases(unittest.TestCase):
 
         self.assertEqual(len(expected_result), len(result))
         self.assertSequenceEqual(sorted(expected_result), sorted(result))
+
+
+#class GetKnightMovementTestCases(unittest.TestCase):
+
+
+class GetRookMovementTestCases(unittest.TestCase):
+    def test_move_in_empty_board(self):
+        piece = Piece.Piece("white", "d", 4, Rank.Rank(4), 0)
+
+        result = main.rook_movement([], piece)
+
+        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "d7", "d8", "e4", "f4", "g4", "h4"]), sorted(result))
+
+    def test_move_with_upwards_black_blocked_by_black(self):
+        piece = Piece.Piece("black", "d", 4, Rank.Rank(4), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("black", "d", 7, Rank.Rank(4), 0))
+        result = main.rook_movement(pieces, piece)
+
+        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "e4", "f4", "g4", "h4"]), sorted(result))
+
+    def test_move_with_upwards_white_in_path_of_black(self):
+        piece = Piece.Piece("black", "d", 4, Rank.Rank(4), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("white", "d", 7, Rank.Rank(4), 0))
+        result = main.rook_movement(pieces, piece)
+
+        self.assertEqual(sorted(["a4", "b4", "c4", "d1", "d2", "d3", "d5", "d6", "d7", "e4", "f4", "g4", "h4"]), sorted(result))
+
+
+class GetQueenMovementTestCases(unittest.TestCase):
+    # def test_move_in_empty_board_from_middle(self):
+    #     piece = Piece.Piece("white", "e", 4, Rank.Rank(6), 0)
+
+    #     result = main.queen_movement([], piece)
+
+    #     self.assertEqual(sorted([ "e1", "e2", "e3", "e5", "e6", "e7", "e8",
+    #                               "a4", "b4", "c4", "d4", "f4", "g4", "h4",
+    #                               "b8", "c7", "d6", "" "f4", "d5"
+    #                               "f3", "d3", ]), sorted(result))
+
+    def test_1_move_available(self):
+        piece = Piece.Piece("black", "d", 5, Rank.Rank(6), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("black", "d", 6, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "d", 4, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "e", 5, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "c", 5, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "e", 4, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "c", 4, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "e", 6, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "b", 7, Rank.Rank(6), 0))
+        
+
+        result = main.queen_movement(pieces, piece)
+
+        self.assertEqual(sorted(["c6"]), sorted(result))
 
 
 class GetKingMovementTestCases(unittest.TestCase):
@@ -336,6 +369,7 @@ class GetKingMovementTestCases(unittest.TestCase):
         result = main.king_movement(pieces, piece)
 
         self.assertEqual(sorted(["c6"]), sorted(result))
+
 
 
 if __name__ == '__main__':
