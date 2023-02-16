@@ -1,5 +1,10 @@
 import pygame
 from win32api import GetSystemMetrics
+import json
+from types import SimpleNamespace
+import square as Square
+from typing import List
+
 
 board = pygame.image.load("chessboard.png")
 
@@ -43,6 +48,7 @@ def load_graphics():
     return result
 
 def starting_positions(screen, graphics):
+
     """
     Adds pieces to their starting positions on the board.
     :param pygame.display screen: Screen to draw the images on.
@@ -92,14 +98,32 @@ def starting_positions(screen, graphics):
     screen.blit(graphics["white_queen"], [230, 490])
     screen.blit(graphics["white_king"], [295, 490])
 
+def dictionary_to_object(data_dict):
+    square = Square.Square(data_dict["top_left_x"], data_dict["top_left_y"], data_dict["bottom_right_x"], data_dict["bottom_right_y"], data_dict["name"], data_dict["piece_occupying"])
+
+    return square 
+
+def initialize_squares():
+    squares = []
+
+    f = open('squareInfo.json')
+    data_dictionary = json.load(f)
+    f.close()
+
+    for square in data_dictionary["squares"]:
+        squares.append(dictionary_to_object(square))
+
+    return squares
+
+def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
+    for square in squares:
+        if coordinates[0] > square.top_left_x and coordinates[0] < square.bottom_right_x and \
+         coordinates[1] > square.top_left_y and coordinates[1] < square.bottom_right_y:
+            return square.name
 
 
 
-
-
-
-
-
+squares = initialize_squares()
 graphics = load_graphics()
 
 background_colour = (0, 150, 250)
@@ -121,3 +145,4 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             clicked_position = pygame.mouse.get_pos()
             print(clicked_position)
+            find_clicked_square(clicked_position, squares)

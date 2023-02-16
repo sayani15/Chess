@@ -252,7 +252,48 @@ class GetBishopMovementTestCases(unittest.TestCase):
         self.assertSequenceEqual(sorted(expected_result), sorted(result))
 
 
-#class GetKnightMovementTestCases(unittest.TestCase):
+class GetKnightMovementTestCases(unittest.TestCase):
+    def test_move_in_empty_board(self):
+        piece = Piece.Piece("white", "d", 4, Rank.Rank(2), 0)
+
+        pieces = []
+        result = main.knight_movement([], piece)
+
+        self.assertEqual(sorted(["f5", "b5", "f3", "b3", "e2", "c2", "e6", "c6" ]), sorted(result))
+
+    def test_one_move_available(self):
+        piece = Piece.Piece("black", "d", 4, Rank.Rank(2), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("black", "f", 5, Rank.Rank(4), 0))
+        pieces.append(Piece.Piece("black", "b", 5, Rank.Rank(5), 0))
+        pieces.append(Piece.Piece("black", "f", 3, Rank.Rank(3), 0))
+        pieces.append(Piece.Piece("black", "b", 3, Rank.Rank(2), 0))
+        pieces.append(Piece.Piece("black", "e", 2, Rank.Rank(3), 0))
+        pieces.append(Piece.Piece("black", "c", 2, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("black", "c", 6, Rank.Rank(1), 0))
+        result = main.knight_movement(pieces, piece)
+
+        self.assertEqual(sorted([ "e6" ]), sorted(result))
+
+    def test_jump_over_other_pieces_to_take(self):
+        piece = Piece.Piece("black", "d", 4, Rank.Rank(2), 0)
+
+        pieces = []
+        pieces.append(Piece.Piece("white", "d", 5, Rank.Rank(1), 0))
+        pieces.append(Piece.Piece("white", "c", 4, Rank.Rank(5), 0))
+
+        pieces.append(Piece.Piece("white", "f", 5, Rank.Rank(4), 0))
+        pieces.append(Piece.Piece("white", "b", 5, Rank.Rank(3), 0))
+        pieces.append(Piece.Piece("white", "f", 3, Rank.Rank(6), 0))
+        pieces.append(Piece.Piece("white", "b", 3, Rank.Rank(3), 0))
+        pieces.append(Piece.Piece("white", "e", 2, Rank.Rank(5), 0))
+        pieces.append(Piece.Piece("white", "c", 2, Rank.Rank(3), 0))
+        pieces.append(Piece.Piece("white", "e", 6, Rank.Rank(2), 0))
+        pieces.append(Piece.Piece("white", "c", 6, Rank.Rank(2), 0))
+        result = main.knight_movement(pieces, piece)
+
+        self.assertEqual(sorted(["f5", "b5", "f3", "b3", "e2", "c2", "e6", "c6" ]), sorted(result))
 
 
 class GetRookMovementTestCases(unittest.TestCase):
@@ -283,15 +324,15 @@ class GetRookMovementTestCases(unittest.TestCase):
 
 
 class GetQueenMovementTestCases(unittest.TestCase):
-    # def test_move_in_empty_board_from_middle(self):
-    #     piece = Piece.Piece("white", "e", 4, Rank.Rank(6), 0)
+    def test_move_in_empty_board_from_middle(self):
+        piece = Piece.Piece("white", "e", 4, Rank.Rank(6), 0)
 
-    #     result = main.queen_movement([], piece)
+        result = main.queen_movement([], piece)
 
-    #     self.assertEqual(sorted([ "e1", "e2", "e3", "e5", "e6", "e7", "e8",
-    #                               "a4", "b4", "c4", "d4", "f4", "g4", "h4",
-    #                               "b8", "c7", "d6", "" "f4", "d5"
-    #                               "f3", "d3", ]), sorted(result))
+        self.assertEqual(sorted([ "e1", "e2", "e3", "e5", "e6", "e7", "e8",
+                                  "a4", "b4", "c4", "d4", "f4", "g4", "h4",
+                                  "a8", "b7", "c6", "d5", "f3", "g2", "h1",
+                                  "b1", "c2", "d3", "f5", "g6", "h7" ]), sorted(result))
 
     def test_1_move_available(self):
         piece = Piece.Piece("black", "d", 5, Rank.Rank(6), 0)
@@ -310,6 +351,17 @@ class GetQueenMovementTestCases(unittest.TestCase):
         result = main.queen_movement(pieces, piece)
 
         self.assertEqual(sorted(["c6"]), sorted(result))
+
+    # def test_move_from_corner(self):
+    #     piece = Piece.Piece("white", "h", "8", Rank.Rank(5), 28)
+    #     pieces = []
+    #     pieces.append(Piece.Piece("white", "c", "7", Rank.Rank(6), 28))
+
+    #     result = main.queen_movement(pieces, piece)
+
+    #     self.assertEqual(sorted(["h7", "h6", "h5", "h4", "h3", "h2", "h1",
+    #                               "g8", "f8", "e8", "d8", "c8", "b8", "a8",
+    #                               "g7", "f6", "e5", "d4", "c3", "b2", "a1"]), sorted(result))
 
 
 class GetKingMovementTestCases(unittest.TestCase):

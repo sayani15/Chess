@@ -170,7 +170,6 @@ def get_piece_in_the_square(x_position, y_position, pieces):
         raise Exception(f"Square {x_position},{y_position} not occupied.")
 
 
-
 def pawn_movement(pieces, piece):
     """
     Describes all pawn movement and adds them to a list of valid moves.
@@ -308,13 +307,13 @@ def knight_movement(pieces, piece):
 
     # +1 y_pos, +2 x_pos
     if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position + 2) and \
-                is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position + 2}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position + 2) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, 1), piece.y_position + 2, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position + 2}")
+        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position + 1) and \
+                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position + 1):
+            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position + 1}")
+        if is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position + 1) and \
+                get_piece_in_the_square(examine_x_positions(piece.x_position, 2), piece.y_position + 1, pieces).colour != piece.colour.lower() and \
+                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position + 1):
+            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position + 1}")
         else:
             _ = 1  # something needs to happen here that isn't adding to valid_moves
 
@@ -332,13 +331,13 @@ def knight_movement(pieces, piece):
 
     # -1 y_pos, +2 x_pos
     if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position + 2) and \
-                is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position,- 1)}{piece.y_position + 2}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position,- 1), piece.y_position + 2) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, -1), piece.y_position + 2, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position,- 1)}{piece.y_position + 2}")
+        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position - 1) and \
+                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position - 1):
+            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position - 1}")
+        if is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position - 1) and \
+                get_piece_in_the_square(examine_x_positions(piece.x_position, 2), piece.y_position - 1, pieces).colour != piece.colour.lower() and \
+                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position - 1):
+            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position - 1}")
         else:
             _ = 1  # something needs to happen here that isn't adding to valid_moves
 

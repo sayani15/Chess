@@ -1,0 +1,32 @@
+
+
+{
+    "squares": [
+        {
+            "top_left_x" : 22,
+            "top_left_y" : 14,
+            "bottom_right_x" : 82,
+            "bottom_right_y" : 70,
+            "name" : "a8",
+            "piece_occupying" : "rook"
+
+        },   
+        {
+            "top_left_x" : 90,
+            "top_left_y" : 8,
+            "bottom_right_x" : 143,
+            "bottom_right_y" : 70,
+            "name" : "b8",
+            "piece_occupying" : "knight"
+                },   
+        {
+            "top_left_x" : 159,
+            "top_left_y" : 15,
+            "bottom_right_x" : 209,
+            "bottom_right_y" : 70,
+            "name" : "c8",
+            "piece_occupying" : "bishop"
+                }
+        
+    ]
+}
