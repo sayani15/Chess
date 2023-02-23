@@ -5,7 +5,6 @@ from types import SimpleNamespace
 import square as Square
 from typing import List
 
-
 board = pygame.image.load("chessboard.png")
 
 def load_graphics():
@@ -47,7 +46,7 @@ def load_graphics():
 
     return result
 
-def starting_positions(screen, graphics):
+def starting_positions(screen: pygame.display, graphics: dict):
 
     """
     Adds pieces to their starting positions on the board.
@@ -98,7 +97,7 @@ def starting_positions(screen, graphics):
     screen.blit(graphics["white_queen"], [230, 490])
     screen.blit(graphics["white_king"], [295, 490])
 
-def dictionary_to_object(data_dict):
+def dictionary_to_object(data_dict: dict):
     square = Square.Square(data_dict["top_left_x"], data_dict["top_left_y"], data_dict["bottom_right_x"], data_dict["bottom_right_y"], data_dict["name"], data_dict["piece_occupying"])
 
     return square 
@@ -116,11 +115,11 @@ def initialize_squares():
     return squares
 
 def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
+    #TODO: If user clicks outside grid 
     for square in squares:
         if coordinates[0] > square.top_left_x and coordinates[0] < square.bottom_right_x and \
          coordinates[1] > square.top_left_y and coordinates[1] < square.bottom_right_y:
             return square.name
-
 
 
 squares = initialize_squares()
@@ -145,4 +144,4 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             clicked_position = pygame.mouse.get_pos()
             print(clicked_position)
-            find_clicked_square(clicked_position, squares)
+            find_clicked_square(clicked_position, squares)      

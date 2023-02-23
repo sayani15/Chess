@@ -730,7 +730,6 @@ def queen_movement(pieces, piece):
 
 
 
-
 if __name__ == '__main__':
     grid = create_grid()
     initial_position_grid = reset_pieces(grid)
