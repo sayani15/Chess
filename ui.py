@@ -121,7 +121,19 @@ def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
          coordinates[1] > square.top_left_y and coordinates[1] < square.bottom_right_y:
             return square.name
 
+def highlight_squares():
+    return
 
+            
+def perform_white_turn(clicked_square: str):
+    is_white_turn = False
+    return
+def perform_black_turn(clicked_square: str):
+    is_white_turn = True
+    return
+
+is_white_turn = True
+is_game_over = False
 squares = initialize_squares()
 graphics = load_graphics()
 
@@ -130,18 +142,33 @@ background_colour = (0, 150, 250)
 (width, height) = (600, 600)
 
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+highlight_surface_layer = pygame.display.set_mode((width, height))
 pygame.display.set_caption("chess")
 screen.fill(background_colour)
+s = pygame.Surface((1000,750))  # the size of your rect
+s.set_alpha(50)                # alpha level
+s.fill((255,255,255))           # this fills the entire surface
 pygame.display.flip()
 running = True
 while running:
     screen.blit(board, [0, 0])
+    highlight_surface_layer.blit(s, (0,0))    # (0,0) are the top-left coordinates
+
     starting_positions(screen, graphics)
+    pygame.draw.rect(screen, (54, 152, 200, 0), (20, 150, 240, 240))
     pygame.display.flip()
+    
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONUP:
             clicked_position = pygame.mouse.get_pos()
-            print(clicked_position)
-            find_clicked_square(clicked_position, squares)      
+           # print(clicked_position)
+            # print(find_clicked_square(clicked_position, squares))    
+            clicked_square = find_clicked_square(clicked_position, squares)
+    # while not is_game_over:
+    #     if is_white_turn:
+    #         perform_white_turn(clicked_square)
+    #     else:
+    #         perform_black_turn(clicked_square)
+    
