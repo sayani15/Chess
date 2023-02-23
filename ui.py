@@ -142,17 +142,18 @@ background_colour = (0, 150, 250)
 (width, height) = (600, 600)
 
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-highlight_surface_layer = pygame.display.set_mode((width, height))
 pygame.display.set_caption("chess")
 screen.fill(background_colour)
-s = pygame.Surface((1000,750))  # the size of your rect
-s.set_alpha(50)                # alpha level
-s.fill((255,255,255))           # this fills the entire surface
+rectangle_surface = pygame.Surface((1000,750))  # the size of your rect
+rectangle_surface.set_alpha(70)                # alpha level
+rectangle_surface.fill((255,255,255))           # this fills the entire surface
 pygame.display.flip()
+
 running = True
+
 while running:
     screen.blit(board, [0, 0])
-    highlight_surface_layer.blit(s, (0,0))    # (0,0) are the top-left coordinates
+    screen.blit(rectangle_surface, [0, 0])
 
     starting_positions(screen, graphics)
     pygame.draw.rect(screen, (54, 152, 200, 0), (20, 150, 240, 240))
