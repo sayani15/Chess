@@ -247,260 +247,259 @@
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 482,
+            "top_left_x" : 418,
             "top_left_y" : 213,
-            "bottom_right_x" : 547,
+            "bottom_right_x" : 482,
             "bottom_right_y" : 277,
             "name" : "g5",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 20,
-            "top_left_y" : 281,
-            "bottom_right_x" : 87,
-            "bottom_right_y" : 347,
+            "top_left_x" : 483,
+            "top_left_y" : 213,
+            "bottom_right_x" : 549,
+            "bottom_right_y" : 279,
             "name" : "h5",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 87,
+            "top_left_x" : 21,
             "top_left_y" : 280,
-            "bottom_right_x" : 151,
+            "bottom_right_x" : 87,
             "bottom_right_y" : 345,
             "name" : "a4",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 153,
+            "top_left_x" : 87,
             "top_left_y" : 280,
-            "bottom_right_x" : 219,
+            "bottom_right_x" : 149,
             "bottom_right_y" : 346,
             "name" : "b4",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 219,
+            "top_left_x" : 153,
             "top_left_y" : 280,
-            "bottom_right_x" : 285,
+            "bottom_right_x" : 220,
             "bottom_right_y" : 347,
             "name" : "c4",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 351,
+            "top_left_x" : 220,
             "top_left_y" : 280,
-            "bottom_right_x" : 417,
-            "bottom_right_y" : 343,
+            "bottom_right_x" : 286,
+            "bottom_right_y" : 346,
             "name" : "d4",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 419,
+            "top_left_x" : 286,
             "top_left_y" : 277,
-            "bottom_right_x" : 483,
+            "bottom_right_x" : 350,
             "bottom_right_y" : 345,
             "name" : "e4",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 20,
-            "top_left_y" : 348,
-            "bottom_right_x" : 88,
-            "bottom_right_y" : 413,
+            "top_left_x" : 351,
+            "top_left_y" : 279,
+            "bottom_right_x" : 418,
+            "bottom_right_y" : 347,
             "name" : "f4",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 86,
-            "top_left_y" : 346,
-            "bottom_right_x" : 152,
-            "bottom_right_y" : 414,
+            "top_left_x" : 418,
+            "top_left_y" : 280,
+            "bottom_right_x" : 483,
+            "bottom_right_y" : 345,
             "name" : "g4",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 150,
-            "top_left_y" : 347,
-            "bottom_right_x" : 219,
-            "bottom_right_y" : 414,
+            "top_left_x" : 484,
+            "top_left_y" : 281,
+            "bottom_right_x" : 548,
+            "bottom_right_y" : 346,
             "name" : "h4",
             "piece_occupying" : ""
         },
+
         {
-            "top_left_x" : 219,
+            "top_left_x" : 21,
             "top_left_y" : 347,
-            "bottom_right_x" : 284,
+            "bottom_right_x" : 88,
             "bottom_right_y" : 412,
             "name" : "a3",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 284,
+            "top_left_x" : 86,
             "top_left_y" : 347,
-            "bottom_right_x" : 349,
+            "bottom_right_x" : 151,
             "bottom_right_y" : 413,
             "name" : "b3",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 351,
+            "top_left_x" : 151,
             "top_left_y" : 348,
-            "bottom_right_x" : 419,
-            "bottom_right_y" : 413,
+            "bottom_right_x" : 218,
+            "bottom_right_y" : 411,
             "name" : "c3",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 417,
+            "top_left_x" : 220,
             "top_left_y" : 345,
-            "bottom_right_x" : 480,
-            "bottom_right_y" : 414,
+            "bottom_right_x" : 285,
+            "bottom_right_y" : 412,
             "name" : "d3",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 484,
+            "top_left_x" : 286,
             "top_left_y" : 347,
-            "bottom_right_x" : 547,
+            "bottom_right_x" : 351,
             "bottom_right_y" : 412,
             "name" : "e3",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 19,
-            "top_left_y" : 415,
-            "bottom_right_x" : 85,
-            "bottom_right_y" : 482,
+            "top_left_x" : 352,
+            "top_left_y" : 346,
+            "bottom_right_x" : 418,
+            "bottom_right_y" : 412,
             "name" : "f3",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 86,
-            "top_left_y" : 413,
-            "bottom_right_x" : 153,
-            "bottom_right_y" : 479,
+            "top_left_x" : 418,
+            "top_left_y" : 346,
+            "bottom_right_x" : 483,
+            "bottom_right_y" : 412,
             "name" : "g3",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 152,
-            "top_left_y" : 413,
-            "bottom_right_x" : 218,
-            "bottom_right_y" : 482,
+            "top_left_x" : 483,
+            "top_left_y" : 346,
+            "bottom_right_x" : 550,
+            "bottom_right_y" : 412,
             "name" : "h3",
             "piece_occupying" : ""
         },
+
         {
-            "top_left_x" : 219,
+            "top_left_x" : 21,
             "top_left_y" : 414,
-            "bottom_right_x" : 282,
+            "bottom_right_x" : 88,
             "bottom_right_y" : 480,
             "name" : "a2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 286,
+            "top_left_x" : 87,
             "top_left_y" : 414,
-            "bottom_right_x" : 351,
+            "bottom_right_x" : 152,
             "bottom_right_y" : 482,
             "name" : "b2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 417,
+            "top_left_x" : 151,
             "top_left_y" : 415,
-            "bottom_right_x" : 481,
+            "bottom_right_x" : 218,
             "bottom_right_y" : 478,
             "name" : "c2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 483,
+            "top_left_x" : 219,
             "top_left_y" : 412,
-            "bottom_right_x" : 550,
+            "bottom_right_x" : 285,
             "bottom_right_y" : 482,
             "name" : "d2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 20,
-            "top_left_y" : 482,
-            "bottom_right_x" : 86,
-            "bottom_right_y" : 548,
+            "top_left_x" : 285,
+            "top_left_y" : 412,
+            "bottom_right_x" : 351,
+            "bottom_right_y" : 480,
             "name" : "e2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 85,
-            "top_left_y" : 484,
-            "bottom_right_x" : 151,
-            "bottom_right_y" : 548,
+            "top_left_x" : 351,
+            "top_left_y" : 412,
+            "bottom_right_x" : 416,
+            "bottom_right_y" : 481,
             "name" : "f2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 152,
-            "top_left_y" : 482,
-            "bottom_right_x" : 217,
-            "bottom_right_y" : 548,
+            "top_left_x" : 418,
+            "top_left_y" : 412,
+            "bottom_right_x" : 484,
+            "bottom_right_y" : 482,
             "name" : "g2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 216,
-            "top_left_y" : 482,
-            "bottom_right_x" : 285,
-            "bottom_right_y" : 548,
+            "top_left_x" : 484,
+            "top_left_y" : 412,
+            "bottom_right_x" : 550,
+            "bottom_right_y" : 480,
             "name" : "h2",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 286,
+            "top_left_x" : 21,
             "top_left_y" : 481,
-            "bottom_right_x" : 351,
+            "bottom_right_x" : 88,
             "bottom_right_y" : 549,
             "name" : "a1",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 350,
+            "top_left_x" : 86,
             "top_left_y" : 482,
-            "bottom_right_x" : 418,
+            "bottom_right_x" : 151,
             "bottom_right_y" : 548,
             "name" : "b1",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 419,
+            "top_left_x" : 151,
             "top_left_y" : 482,
-            "bottom_right_x" : 482,
+            "bottom_right_x" : 217,
             "bottom_right_y" : 548,
             "name" : "c1",
             "piece_occupying" : ""
         },
         {
-            "top_left_x" : 483,
+            "top_left_x" : 220,
             "top_left_y" : 480,
-            "bottom_right_x" : 549,
-            "bottom_right_y" : 545,
+            "bottom_right_x" : 289,
+            "bottom_right_y" : 550,
             "name" : "d1",
             "piece_occupying" : ""
-        },
-
-
-        
+        },        
         {
             "top_left_x" : 285,
             "top_left_y" : 482,
-            "bottom_right_x" : 352,
+            "bottom_right_x" : 349,
             "bottom_right_y" : 550,
             "name" : "e1",
             "piece_occupying" : ""
         },
         {
             "top_left_x" : 351,
-            "top_left_y" : 484,
-            "bottom_right_x" : 419,
+            "top_left_y" : 482,
+            "bottom_right_x" : 417,
             "bottom_right_y" : 548,
             "name" : "f1",
             "piece_occupying" : ""
@@ -516,7 +515,7 @@
         {
             "top_left_x" : 484,
             "top_left_y" : 481,
-            "bottom_right_x" : 551,
+            "bottom_right_x" : 550,
             "bottom_right_y" : 549,
             "name" : "h1",
             "piece_occupying" : ""
