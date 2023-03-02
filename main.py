@@ -1,6 +1,7 @@
 import numpy as np
 import piece as Piece
 import rank as Rank
+from typing import List
 
 
 def create_grid():
@@ -140,7 +141,7 @@ def converts_letter_to_number(letter):
     return letters_numbers_dict[letter.lower()]
 
 
-def is_square_occupied(pieces, x_square_pos, y_square_pos):
+def is_square_occupied(pieces: List[Piece.Piece] , x_square_pos: str, y_square_pos: int):
     """
     Checks if the given squares are occupied by any of the pieces.
     :param list pieces:  List of piece. A list of all the pieces currently on the board.
@@ -154,7 +155,7 @@ def is_square_occupied(pieces, x_square_pos, y_square_pos):
     return False
 
 
-def get_piece_in_the_square(x_position, y_position, pieces):
+def get_piece_in_the_square(x_position, y_position, pieces) -> Piece.Piece: 
     """
     Checks if the given squares are occupied by any of the pieces, then returns the piece occupying it.
     :param string x_position:  The x-coordinate of the piece.

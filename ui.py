@@ -4,6 +4,9 @@ import json
 from types import SimpleNamespace
 import square as Square
 from typing import List
+import main
+import rank as Rank
+import numpy as np
 
 board = pygame.image.load("chessboard.png")
 
@@ -98,11 +101,24 @@ def starting_positions(screen: pygame.display, graphics: dict):
     screen.blit(graphics["white_king"], [295, 490])
 
 def dictionary_to_object(data_dict: dict):
+    """
+
+    Args:
+        data_dict (dict): 
+
+    Returns:
+        square (): _description_
+    """
     square = Square.Square(data_dict["top_left_x"], data_dict["top_left_y"], data_dict["bottom_right_x"], data_dict["bottom_right_y"], data_dict["name"], data_dict["piece_occupying"])
 
     return square 
 
 def initialize_squares():
+    """Adds info about each square from the json file to square
+
+    Returns:
+        squares (list): List of square
+    """
     squares = []
 
     f = open('squareInfo.json')
@@ -115,6 +131,15 @@ def initialize_squares():
     return squares
 
 def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
+    """Finds the name of the square when given coordinates of position.
+
+    Args:
+        coordinates (tuple): List containing coordinates of position that has been clicked on 
+        squares (List[Square.Square]): List of squares
+
+    Returns:
+        square.name (string): Name of square
+    """
     #TODO: If user clicks outside grid 
     for square in squares:
         if coordinates[0] > square.top_left_x and coordinates[0] < square.bottom_right_x and \
@@ -125,7 +150,44 @@ def highlight_squares():
     return
 
             
-def perform_white_turn(clicked_square: str):
+def perform_white_turn(clicked_square: str, pieces_in_play: list):
+    selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
+    if selected_piece.rank == Rank.Rank.pawn:
+        valid_moves = main.pawn_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.knight:
+        valid_moves = main.knight_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.bishop:
+        valid_moves = main.bishop_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.rook:
+        valid_moves = main.rook_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.queen:
+        valid_moves = main.queen_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.king:
+        valid_moves = main.king_movement(pieces_in_play, selected_piece)  
+    else:
+        raise Exception
+    
+    f = open('squareInfo.json')
+    data_dictionary = json.load(f)
+    f.close()
+
+    for valid_move in valid_moves:
+        for square in data_dictionary["squares"]:
+            if square["name"][0] == valid_move[0] and square["name"][1] == valid_move[1]:
+                print(square["name"])
+                print(square["top_left_x"])
+                print(square["top_left_y"])
+
+                width = np.abs(square["bottom_right_x"] - square["top_left_x"])
+                height = np.abs(square["bottom_right_y"] - square["top_left_y"])
+
+                pygame.draw.rect(screen, (54, 152, 200, 0), (square["top_left_x"],square["top_left_y"], width, height))
+                pygame.display.flip()
+    
+
+        
+    
+    
     is_white_turn = False
     return
 def perform_black_turn(clicked_square: str):
@@ -134,6 +196,7 @@ def perform_black_turn(clicked_square: str):
 
 is_white_turn = True
 is_game_over = False
+pieces_in_play = main.create_pieces()
 squares = initialize_squares()
 graphics = load_graphics()
 
@@ -156,7 +219,7 @@ while running:
     screen.blit(rectangle_surface, [0, 0])
 
     starting_positions(screen, graphics)
-    pygame.draw.rect(screen, (54, 152, 200, 0), (20, 150, 240, 240))
+    #pygame.draw.rect(screen, (54, 152, 200, 0), (20, 150, 240, 240))
     pygame.display.flip()
     
     for event in pygame.event.get():
@@ -164,12 +227,12 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONUP:
             clicked_position = pygame.mouse.get_pos()
-           # print(clicked_position)
+            # print(clicked_position)
             # print(find_clicked_square(clicked_position, squares))    
             clicked_square = find_clicked_square(clicked_position, squares)
-    # while not is_game_over:
-    #     if is_white_turn:
-    #         perform_white_turn(clicked_square)
-    #     else:
-    #         perform_black_turn(clicked_square)
-    
+            while not is_game_over:
+                if is_white_turn:
+                    perform_white_turn(clicked_square, pieces_in_play)
+                else:
+                    perform_black_turn(clicked_square, pieces_in_play)
+            
