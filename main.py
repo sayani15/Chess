@@ -163,12 +163,12 @@ def get_piece_in_the_square(x_position, y_position, pieces) -> Piece.Piece:
     :param list pieces:  List of piece. A list of all the pieces currently on the board.
     :return: piece: The piece occupying the square.
     """
-    if is_square_occupied(pieces, x_position, y_position):
+    if is_square_occupied(pieces, x_position, int(y_position)):
         for piece in pieces:
-            if x_position == piece.x_position and y_position == piece.y_position:
+            if x_position == piece.x_position and int(y_position) == piece.y_position:
                 return piece
     else:
-        raise Exception(f"Square {x_position},{y_position} not occupied.")
+        return None
 
 
 def pawn_movement(pieces, piece):
