@@ -3,9 +3,10 @@ from win32api import GetSystemMetrics
 import json
 from types import SimpleNamespace
 import square as Square
+import rank as Rank
+import piece as Piece
 from typing import List
 import main
-import rank as Rank
 import numpy as np
 
 board = pygame.image.load("chessboard.png")
@@ -147,6 +148,11 @@ def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
             return square.name
 
 def highlight_squares(squares: List[Square.Square]):
+    """Draws rectangles to highlight the squares that are part of the valid_moves for selected_piece.
+
+    Args:
+        squares (List[Square.Square]): A list of all squares
+    """
     for square in squares:
         width = np.abs(square.bottom_right_x - square.top_left_x)
         height = np.abs(square.bottom_right_y - square.top_left_y)
@@ -157,12 +163,18 @@ def highlight_squares(squares: List[Square.Square]):
 
     return
 
-            
-def perform_white_turn(clicked_square: str, pieces_in_play: list):
-    pygame.image.save(screen, "current_view.png")
-    has_completed_turn = False
-    selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
-    
+def get_movement_of_selected_piece(selected_piece: Piece):
+    """Finds the rank of the player's selected piece and returns the valid moves for the piece in its current position.
+
+    Args:
+        selected_piece (Piece): The piece that has been selected by the player.
+
+    Raises:
+        Exception: Raises exception if selected_piece's rank does not match a valid rank.
+
+    Returns:
+        valid_moves (list) : List of available moves for the piece.
+    """
     if selected_piece.rank == Rank.Rank.pawn:
         valid_moves = main.pawn_movement(pieces_in_play, selected_piece)
     elif selected_piece.rank == Rank.Rank.knight:
@@ -177,6 +189,15 @@ def perform_white_turn(clicked_square: str, pieces_in_play: list):
         valid_moves = main.king_movement(pieces_in_play, selected_piece)  
     else:
         raise Exception
+    
+    return valid_moves
+            
+def perform_white_turn(clicked_square: str, pieces_in_play: list):
+    pygame.image.save(screen, "current_view.png")
+    has_completed_turn = False
+    selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
+
+    valid_moves = get_movement_of_selected_piece(selected_piece)
     
     f = open('squareInfo.json')
     data_dictionary = json.load(f)
@@ -232,6 +253,7 @@ def perform_white_turn(clicked_square: str, pieces_in_play: list):
 def perform_black_turn(clicked_square: str):
     is_white_turn = True
     return
+
 
 is_white_turn = True
 is_game_over = False
