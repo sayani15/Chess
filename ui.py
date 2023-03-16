@@ -192,7 +192,7 @@ def get_movement_of_selected_piece(selected_piece: Piece):
     
     return valid_moves
             
-def perform_white_turn(clicked_square: str, pieces_in_play: list):
+def perform_black_turn(clicked_square: str, pieces_in_play: list):
     pygame.image.save(screen, "current_view.png")
     has_completed_turn = False
     selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
@@ -228,7 +228,21 @@ def perform_white_turn(clicked_square: str, pieces_in_play: list):
                 clicked_square = find_clicked_square(clicked_position, squares)
                 # Player has clicked on a different piece
                 if main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play) is not None:
+                    selected_piece = main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play)
+                    valid_moves = get_movement_of_selected_piece(selected_piece)
+                    squares_to_highlight = []
+
+                    for valid_move in valid_moves:
+                        for square in squares:
+                            if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
+                                squares_to_highlight.append(square)
+
+                    unhighlighted_view_of_board = pygame.image.load("current_view.png")
+                    screen.blit(unhighlighted_view_of_board, [0, 0])
+                    pygame.display.flip()
+                    highlight_squares(squares_to_highlight)
                     a = 1 # write the method
+                    
                 # Player has clicked on a highlighted square
                 elif clicked_square in valid_moves:
                     a = 1 # write the method
@@ -250,12 +264,12 @@ def perform_white_turn(clicked_square: str, pieces_in_play: list):
     return
 
 
-def perform_black_turn(clicked_square: str):
+def perform_white_turn(clicked_square: str):
     is_white_turn = True
     return
 
 
-is_white_turn = True
+is_white_turn = False   # TODO: Turn back to true when method's written
 is_game_over = False
 pieces_in_play = main.create_pieces()
 squares = initialize_squares()
@@ -292,8 +306,8 @@ while running:
             # print(find_clicked_square(clicked_position, squares))    
             clicked_square = find_clicked_square(clicked_position, squares)
             while not is_game_over:
-                if is_white_turn:
-                    perform_white_turn(clicked_square, pieces_in_play)
-                else:
+                if not is_white_turn:
                     perform_black_turn(clicked_square, pieces_in_play)
+                else:
+                    perform_white_turn(clicked_square, pieces_in_play)
             

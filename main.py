@@ -129,13 +129,15 @@ def examine_x_positions(letter, number):
     return letter_result
 
 
-def is_square_valid(x_square_pos, y_square_pos):
+def is_square_valid(x_square_pos: str, y_square_pos: int):
+    if type(x_square_pos) != str or type(y_square_pos) != int:
+        return False
     if 1 <= converts_letter_to_number(x_square_pos) <= 8 and 1 <= y_square_pos <= 8 :
         return True
     return False
 
 
-def converts_letter_to_number(letter):
+def converts_letter_to_number(letter: str):
     letters_numbers_dict = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6, "g": 7, "h": 8}
 
     return letters_numbers_dict[letter.lower()]
