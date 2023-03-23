@@ -4,6 +4,7 @@ import rank as Rank
 from typing import List
 
 
+
 def create_grid():
     """
     Uses an array to create the positions of all 64 squares of the chessboard
@@ -23,7 +24,7 @@ def create_grid():
     return np.asarray(grid)
 
 
-def reset_pieces(grid):
+def reset_pieces(grid: np.array):
     """
     Returns the grid with all the pieces on the grid in their starting positions.
     :param grid:
@@ -95,7 +96,7 @@ def create_pieces():
     return pieces
 
 
-def two_of_a_kind_pieces(colour, x_coordinate, y_coordinate, rank):
+def two_of_a_kind_pieces(colour: str, x_coordinate: str, y_coordinate: str, rank: int):
     """
     Creates the piece object for every rank that has two of each piece.
     :param string colour: Colour of the piece can be black or white.
@@ -108,7 +109,7 @@ def two_of_a_kind_pieces(colour, x_coordinate, y_coordinate, rank):
     return piece
 
 
-def examine_x_positions(letter, number):
+def examine_x_positions(letter: str, number: int):
     """
     Handles adding a number to a letter.
     :param string letter: The letter we want to add a number to.
@@ -130,6 +131,15 @@ def examine_x_positions(letter, number):
 
 
 def is_square_valid(x_square_pos: str, y_square_pos: int):
+    """Determines whether a square is on the board or not.
+
+    Args:
+        x_square_pos (str): The x position of the the square.
+        y_square_pos (int): The y position of the square.
+
+    Returns:
+        bool: Returns False if the square is not valid, True if it is.
+    """
     if type(x_square_pos) != str or type(y_square_pos) != int:
         return False
     if 1 <= converts_letter_to_number(x_square_pos) <= 8 and 1 <= y_square_pos <= 8 :
@@ -138,6 +148,14 @@ def is_square_valid(x_square_pos: str, y_square_pos: int):
 
 
 def converts_letter_to_number(letter: str):
+    """Converts a letter to a number.
+
+    Args:
+        letter (str): The letter to be converted to a number.
+
+    Returns:
+        letters_numbers_dict (dict): A dictionary of numbers to letters. (a-h/1-8)
+    """
     letters_numbers_dict = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6, "g": 7, "h": 8}
 
     return letters_numbers_dict[letter.lower()]
@@ -173,7 +191,7 @@ def get_piece_in_the_square(x_position, y_position, pieces) -> Piece.Piece:
         return None
 
 
-def pawn_movement(pieces, piece):
+def pawn_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     """
     Describes all pawn movement and adds them to a list of valid moves.
     :param list pieces: A list of all the pieces currently on the board.
@@ -257,7 +275,13 @@ def pawn_movement(pieces, piece):
     return valid_moves
 
 
-def knight_movement(pieces, piece):
+def knight_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
+    """
+    Describes all knight movement and adds them to a list of valid moves.
+    :param list pieces: A list of all the pieces currently on the board.
+    :param piece: The item of list pieces that knight_movement is currently finding valid moves for.
+    :return: valid_moves: A list of all the valid knight moves for the player in that position.
+    """
     valid_moves = []
     
     # +2 y_pos, +1 x_pos
@@ -369,7 +393,13 @@ def knight_movement(pieces, piece):
     return valid_moves
 
 
-def rook_movement(pieces, piece):
+def rook_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
+    """
+    Describes all rook movement and adds them to a list of valid moves.
+    :param list pieces: A list of all the pieces currently on the board.
+    :param piece: The item of list pieces that rook_movement is currently finding valid moves for.
+    :return: valid_moves: A list of all the valid rook moves for the player in that position.
+    """
     # TODO: castling
     valid_moves = []
 
@@ -433,7 +463,13 @@ def rook_movement(pieces, piece):
     return valid_moves
 
 
-def king_movement(pieces, piece):
+def king_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
+    """
+    Describes all king movement and adds them to a list of valid moves.
+    :param list pieces: A list of all the pieces currently on the board.
+    :param piece: The item of list pieces that king_movement is currently finding valid moves for.
+    :return: valid_moves: A list of all the valid king moves for the player in that position.
+    """
     # TODO: castling
     valid_moves = []
 
@@ -545,7 +581,13 @@ def king_movement(pieces, piece):
     return valid_moves
 
 
-def bishop_movement(pieces, piece):
+def bishop_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
+    """
+    Describes all bishop movement and adds them to a list of valid moves.
+    :param list pieces: A list of all the pieces currently on the board.
+    :param piece: The item of list pieces that bishop_movement is currently finding valid moves for.
+    :return: valid_moves: A list of all the valid bishop moves for the player in that position.
+    """
     valid_moves = []
     squares_to_top = 8 - piece.y_position
     squares_to_bottom = piece.y_position - 1
@@ -613,8 +655,13 @@ def bishop_movement(pieces, piece):
     return valid_moves
 
 
-def queen_movement(pieces, piece):
-
+def queen_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
+    """
+    Describes all queen movement and adds them to a list of valid moves.
+    :param list pieces: A list of all the pieces currently on the board.
+    :param piece: The item of list pieces that queen_movement is currently finding valid moves for.
+    :return: valid_moves: A list of all the valid queen moves for the player in that position.
+    """
     valid_moves = []
 
     # STRAIGHT

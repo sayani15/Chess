@@ -102,7 +102,7 @@ def starting_positions(screen: pygame.display, graphics: dict):
     screen.blit(graphics["white_king"], [295, 490])
 
 def dictionary_to_object(data_dict: dict):
-    """
+    """TUrns dictionaries into objects
 
     Args:
         data_dict (dict): 
@@ -147,13 +147,20 @@ def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
          coordinates[1] > square.top_left_y and coordinates[1] < square.bottom_right_y:
             return square.name
 
-def highlight_squares(squares: List[Square.Square]):
+def highlight_squares(valid_moves: List[str]):
     """Draws rectangles to highlight the squares that are part of the valid_moves for selected_piece.
 
     Args:
         squares (List[Square.Square]): A list of all squares
     """
-    for square in squares:
+    squares_to_highlight = []
+
+    for valid_move in valid_moves:
+        for square in squares:
+            if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
+                squares_to_highlight.append(square)
+
+    for square in squares_to_highlight:
         width = np.abs(square.bottom_right_x - square.top_left_x)
         height = np.abs(square.bottom_right_y - square.top_left_y)
 
@@ -208,14 +215,8 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
     for square in data_dictionary["squares"]:
             squares.append(dictionary_to_object(square))
     
-    squares_to_highlight = []
 
-    for valid_move in valid_moves:
-        for square in squares:
-            if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
-                squares_to_highlight.append(square)
-
-    highlight_squares(squares_to_highlight)
+    highlight_squares(valid_moves)
 
     while not has_completed_turn:
         for event in pygame.event.get():
@@ -223,24 +224,17 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                 running = False
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked_position = pygame.mouse.get_pos()
-                # print(clicked_position)
-                # print(find_clicked_square(clicked_position, squares))    
+               
                 clicked_square = find_clicked_square(clicked_position, squares)
                 # Player has clicked on a different piece
                 if main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play) is not None:
                     selected_piece = main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play)
                     valid_moves = get_movement_of_selected_piece(selected_piece)
-                    squares_to_highlight = []
-
-                    for valid_move in valid_moves:
-                        for square in squares:
-                            if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
-                                squares_to_highlight.append(square)
 
                     unhighlighted_view_of_board = pygame.image.load("current_view.png")
                     screen.blit(unhighlighted_view_of_board, [0, 0])
                     pygame.display.flip()
-                    highlight_squares(squares_to_highlight)
+                    highlight_squares(valid_moves)
                     a = 1 # write the method
                     
                 # Player has clicked on a highlighted square
@@ -262,7 +256,6 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
         
     is_white_turn = False
     return
-
 
 def perform_white_turn(clicked_square: str):
     is_white_turn = True
