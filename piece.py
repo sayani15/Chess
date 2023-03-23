@@ -5,3 +5,4 @@ class Piece:
         self.y_position = y_position
         self.rank = rank
         self.move_counter = move_counter
+

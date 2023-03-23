@@ -175,11 +175,11 @@ def is_square_occupied(pieces: List[Piece.Piece] , x_square_pos: str, y_square_p
     return False
 
 
-def get_piece_in_the_square(x_position, y_position, pieces) -> Piece.Piece: 
+def get_piece_in_the_square(x_position: str, y_position: int, pieces: List[Piece.Piece]) -> Piece.Piece: 
     """
     Checks if the given squares are occupied by any of the pieces, then returns the piece occupying it.
     :param string x_position:  The x-coordinate of the piece.
-    :param int y_position: The x-coordinate of the piece.
+    :param int y_position: The y-coordinate of the piece.
     :param list pieces:  List of piece. A list of all the pieces currently on the board.
     :return: piece: The piece occupying the square.
     """
