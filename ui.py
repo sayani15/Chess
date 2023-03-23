@@ -4,6 +4,7 @@ import json
 from types import SimpleNamespace
 import square as Square
 import rank as Rank
+import piece_pixel_positions as Piece_pixel_positions
 import piece as Piece
 from typing import List
 import main
@@ -100,6 +101,21 @@ def starting_positions(screen: pygame.display, graphics: dict):
 
     screen.blit(graphics["white_queen"], [230, 490])
     screen.blit(graphics["white_king"], [295, 490])
+
+def find_current_piece_positions(squares: List[Square.Square]):
+    
+    result = []
+
+    # TODO: Do the below with all cells
+    p = main.get_piece_in_the_square("a", 7, pieces_in_play)
+    for square in squares:
+        if square.name[0] == "a" and square.name[1] == "7":
+             result.append(Piece_pixel_positions.Piece_pixel_positions(p.colour, square.top_left_x, square.top_left_y, p.rank))
+
+    return result
+    
+
+    
 
 def dictionary_to_object(data_dict: dict):
     """TUrns dictionaries into objects
@@ -236,10 +252,12 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                     pygame.display.flip()
                     highlight_squares(valid_moves)
                     a = 1 # write the method
-                    
                 # Player has clicked on a highlighted square
                 elif clicked_square in valid_moves:
-                    a = 1 # write the method
+                    screen.blit(graphics["board"], [0, 0])
+                    pygame.display.flip()
+                    current_piece_positions = find_current_piece_positions(squares)
+                    a = 1
                 # Player has clicked somewhere else
                 else:
                     unhighlighted_view_of_board = pygame.image.load("current_view.png")
