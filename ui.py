@@ -12,7 +12,7 @@ import numpy as np
 
 board = pygame.image.load("chessboard.png")
 
-def load_graphics():
+def load_graphics(): 
     """Loads the images from the file.
 
     Returns:
@@ -51,7 +51,7 @@ def load_graphics():
 
     return result
 
-def starting_positions(screen: pygame.display, graphics: dict):
+def starting_positions(screen: pygame.display, graphics: dict): 
 
     """
     Adds pieces to their starting positions on the board.
@@ -102,7 +102,7 @@ def starting_positions(screen: pygame.display, graphics: dict):
     screen.blit(graphics["white_queen"], [230, 490])
     screen.blit(graphics["white_king"], [295, 490])
 
-def find_current_piece_positions(squares: List[Square.Square]):
+def find_current_piece_positions(squares: List[Square.Square]):  
     
     result = []
 
@@ -114,23 +114,20 @@ def find_current_piece_positions(squares: List[Square.Square]):
 
     return result
     
-
-    
-
-def dictionary_to_object(data_dict: dict):
-    """TUrns dictionaries into objects
+def dictionary_to_object(data_dict: dict):  
+    """Turns dictionaries into objects
 
     Args:
-        data_dict (dict): 
+        data_dict (dict): A dictionary containing the properties of a square as keys and values (e.g. 'name': 'a6' ).
 
     Returns:
-        square (): _description_
+        square (Square): Info about a particular square on the board
     """
     square = Square.Square(data_dict["top_left_x"], data_dict["top_left_y"], data_dict["bottom_right_x"], data_dict["bottom_right_y"], data_dict["name"], data_dict["piece_occupying"])
 
     return square 
 
-def initialize_squares():
+def initialize_squares():  
     """Adds info about each square from the json file to square
 
     Returns:
@@ -145,13 +142,15 @@ def initialize_squares():
     for square in data_dictionary["squares"]:
         squares.append(dictionary_to_object(square))
 
+    
+
     return squares
 
-def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
+def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ): 
     """Finds the name of the square when given coordinates of position.
 
     Args:
-        coordinates (tuple): List containing coordinates of position that has been clicked on 
+        coordinates (tuple): Tuple containing coordinates of position that has been clicked on 
         squares (List[Square.Square]): List of squares
 
     Returns:
@@ -163,7 +162,7 @@ def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
          coordinates[1] > square.top_left_y and coordinates[1] < square.bottom_right_y:
             return square.name
 
-def highlight_squares(valid_moves: List[str]):
+def highlight_squares(valid_moves: List[str]): 
     """Draws rectangles to highlight the squares that are part of the valid_moves for selected_piece.
 
     Args:
@@ -186,7 +185,7 @@ def highlight_squares(valid_moves: List[str]):
 
     return
 
-def get_movement_of_selected_piece(selected_piece: Piece):
+def get_movement_of_selected_piece(selected_piece: Piece): 
     """Finds the rank of the player's selected piece and returns the valid moves for the piece in its current position.
 
     Args:
@@ -211,11 +210,12 @@ def get_movement_of_selected_piece(selected_piece: Piece):
     elif selected_piece.rank == Rank.Rank.king:
         valid_moves = main.king_movement(pieces_in_play, selected_piece)  
     else:
-        raise Exception
+        raise Exception     
     
     return valid_moves
             
-def perform_black_turn(clicked_square: str, pieces_in_play: list):
+def perform_black_turn(clicked_square: str, pieces_in_play: list): 
+     
     pygame.image.save(screen, "current_view.png")
     has_completed_turn = False
     selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
@@ -262,8 +262,7 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                 else:
                     unhighlighted_view_of_board = pygame.image.load("current_view.png")
                     screen.blit(unhighlighted_view_of_board, [0, 0])
-                    pygame.display.flip()
-
+                    pygame.display.flip()                
 
 
                     
@@ -275,7 +274,7 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
     is_white_turn = False
     return
 
-def perform_white_turn(clicked_square: str):
+def perform_white_turn(clicked_square: str):  
     is_white_turn = True
     return
 
@@ -313,8 +312,8 @@ while running:
             running = False
         if event.type == pygame.MOUSEBUTTONUP:
             clicked_position = pygame.mouse.get_pos()
-            # print(clicked_position)
-            # print(find_clicked_square(clicked_position, squares))    
+            print(clicked_position)
+            print(find_clicked_square(clicked_position, squares))    
             clicked_square = find_clicked_square(clicked_position, squares)
             while not is_game_over:
                 if not is_white_turn:

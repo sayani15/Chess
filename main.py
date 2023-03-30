@@ -212,10 +212,13 @@ def pawn_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
 
         # Are the two squares in front of it blocked
         if not is_square_occupied(pieces, piece.x_position, piece.y_position - 1):
-            if is_square_occupied(pieces, piece.x_position, piece.y_position - 2) and piece.move_counter == 0:
-                _ = 1  # something needs to happen here that isn't adding to the valid_moves array
-            else:
-                valid_moves.append(f"{piece.x_position}{piece.y_position - 2}")
+            if not is_square_occupied(pieces, piece.x_position, piece.y_position - 2):
+                if piece.move_counter == 0:
+                    valid_moves.append(f"{piece.x_position}{piece.y_position - 2}")
+
+            #     _ = 1  # something needs to happen here that isn't adding to the valid_moves array
+            # else:
+            #     valid_moves.append(f"{piece.x_position}{piece.y_position - 2}")
 
         # Is there a piece to take
         if is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position - 1) \
@@ -257,7 +260,7 @@ def pawn_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     # the furthest away from the piece.
     vertical_moves = []
     for move in valid_moves:
-        if move[0] == piece.y_position:
+        if move[0] == piece.x_position:
             vertical_moves.append(move)
 
     # removes invalid moves from the list valid_moves.
@@ -267,6 +270,7 @@ def pawn_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
             invalid_moves.append(move)
         elif move[0] not in ["a", "b", "c", "d", "e", "f", "g", "h"]:
             invalid_moves.append(move)
+        
     for move in invalid_moves:
         valid_moves.remove(move)
 

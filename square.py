@@ -1,5 +1,7 @@
+import piece as Piece
+
 class Square:
-    def __init__(self, top_left_x, top_left_y, bottom_right_x, bottom_right_y, name, piece_occupying):
+    def __init__(self, top_left_x: int, top_left_y: int, bottom_right_x: int, bottom_right_y: int, name: str, piece_occupying: Piece.Piece):
         """
 
         Args:

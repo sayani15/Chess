@@ -2,6 +2,8 @@ import unittest
 import piece as Piece
 import rank as Rank
 import main
+import ui
+
 
 
 class IsSquareOccupiedTestCases(unittest.TestCase):
@@ -194,7 +196,7 @@ class GetPawnMovementTestCases(unittest.TestCase):
         self.assertEqual(len(expected_result), len(result))
         self.assertSequenceEqual(sorted(expected_result), sorted(result))
 
-    def test_move_up_while_in_row_8(self):  # doesnt know not to go off board
+    def test_move_up_while_in_row_8(self):  
         piece = Piece.Piece("white", "d", 8, Rank.Rank(1), 0)
         pieces = []
 
@@ -202,7 +204,7 @@ class GetPawnMovementTestCases(unittest.TestCase):
 
         self.assertEqual(result, [])
 
-    def test_move_down_while_in_row_1(self):  # doesnt know not to go off board
+    def test_move_down_while_in_row_1(self):  
         piece = Piece.Piece("black", "d", 1, Rank.Rank(1), 0)
         pieces = []
 
@@ -421,8 +423,6 @@ class GetKingMovementTestCases(unittest.TestCase):
         result = main.king_movement(pieces, piece)
 
         self.assertEqual(sorted(["c6"]), sorted(result))
-
-
 
 if __name__ == '__main__':
     unittest.main()

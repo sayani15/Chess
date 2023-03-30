@@ -398,7 +398,7 @@
             "bottom_right_x" : 88,
             "bottom_right_y" : 480,
             "name" : "a2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 87,
@@ -406,7 +406,7 @@
             "bottom_right_x" : 152,
             "bottom_right_y" : 482,
             "name" : "b2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 151,
@@ -414,7 +414,7 @@
             "bottom_right_x" : 218,
             "bottom_right_y" : 478,
             "name" : "c2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 219,
@@ -422,7 +422,7 @@
             "bottom_right_x" : 285,
             "bottom_right_y" : 482,
             "name" : "d2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 285,
@@ -430,7 +430,7 @@
             "bottom_right_x" : 351,
             "bottom_right_y" : 480,
             "name" : "e2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 351,
@@ -438,7 +438,7 @@
             "bottom_right_x" : 416,
             "bottom_right_y" : 481,
             "name" : "f2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 418,
@@ -446,7 +446,7 @@
             "bottom_right_x" : 484,
             "bottom_right_y" : 482,
             "name" : "g2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 484,
@@ -454,7 +454,7 @@
             "bottom_right_x" : 550,
             "bottom_right_y" : 480,
             "name" : "h2",
-            "piece_occupying" : ""
+            "piece_occupying" : "pawn"
         },
         {
             "top_left_x" : 21,
@@ -462,7 +462,7 @@
             "bottom_right_x" : 88,
             "bottom_right_y" : 549,
             "name" : "a1",
-            "piece_occupying" : ""
+            "piece_occupying" : "rook"
         },
         {
             "top_left_x" : 86,
@@ -470,7 +470,7 @@
             "bottom_right_x" : 151,
             "bottom_right_y" : 548,
             "name" : "b1",
-            "piece_occupying" : ""
+            "piece_occupying" : "knight"
         },
         {
             "top_left_x" : 151,
@@ -478,7 +478,7 @@
             "bottom_right_x" : 217,
             "bottom_right_y" : 548,
             "name" : "c1",
-            "piece_occupying" : ""
+            "piece_occupying" : "bishop"
         },
         {
             "top_left_x" : 220,
@@ -486,7 +486,7 @@
             "bottom_right_x" : 289,
             "bottom_right_y" : 550,
             "name" : "d1",
-            "piece_occupying" : ""
+            "piece_occupying" : "queen"
         },        
         {
             "top_left_x" : 285,
@@ -494,7 +494,7 @@
             "bottom_right_x" : 349,
             "bottom_right_y" : 550,
             "name" : "e1",
-            "piece_occupying" : ""
+            "piece_occupying" : "king"
         },
         {
             "top_left_x" : 351,
@@ -502,7 +502,7 @@
             "bottom_right_x" : 417,
             "bottom_right_y" : 548,
             "name" : "f1",
-            "piece_occupying" : ""
+            "piece_occupying" : "bishop"
         },
         {
             "top_left_x" : 419,
@@ -510,7 +510,7 @@
             "bottom_right_x" : 483,
             "bottom_right_y" : 550,
             "name" : "g1",
-            "piece_occupying" : ""
+            "piece_occupying" : "knight"
         },
         {
             "top_left_x" : 484,
@@ -518,7 +518,7 @@
             "bottom_right_x" : 550,
             "bottom_right_y" : 549,
             "name" : "h1",
-            "piece_occupying" : ""
+            "piece_occupying" : "rook"
         }
     ]
 }
