@@ -102,15 +102,36 @@ def starting_positions(screen: pygame.display, graphics: dict):
     screen.blit(graphics["white_queen"], [230, 490])
     screen.blit(graphics["white_king"], [295, 490])
 
-def find_current_piece_positions(squares: List[Square.Square]):  
-    
-    result = []
+def draw_piece_positions(screen: pygame.display, graphics: dict, piece_pixel_positions: List[Piece_pixel_positions.Piece_pixel_positions]): 
 
-    # TODO: Do the below with all cells
-    p = main.get_piece_in_the_square("a", 7, pieces_in_play)
-    for square in squares:
-        if square.name[0] == "a" and square.name[1] == "7":
-             result.append(Piece_pixel_positions.Piece_pixel_positions(p.colour, square.top_left_x, square.top_left_y, p.rank))
+    """
+    Adds pieces to their positions on the board.
+    :param pygame.display screen: Screen to draw the images on.
+    :param dictionary graphics: Dictionary containing piece name and its corresponding image.
+    :param list of Piece_pixel_positions: List containing the colour, rank, x and y pixel positions.
+    :return: none
+    """
+
+    for piece_pixel_position in piece_pixel_positions:
+        piece_name = f"{piece_pixel_position.colour}_{piece_pixel_position.rank.name.lower()}"
+        screen.blit(graphics[piece_name], [piece_pixel_position.x_pixel_position, piece_pixel_position.y_pixel_position])
+
+
+
+def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel_positions]):  
+
+    result = []
+    x_cells = ["a", "b", "c", "d", "e", "f", "g", "h"]
+    y_cells = [1, 2, 3, 4, 5, 6, 7, 8]
+
+    for x in x_cells:
+        for y in y_cells:
+            p = main.get_piece_in_the_square(x, y, pieces_in_play)
+            if p is not None:
+                for square in squares:
+                    if square.name[0] == x and square.name[1] == str(y):
+                        print(square.name)
+                        result.append(Piece_pixel_positions.Piece_pixel_positions(p.colour, square.top_left_x, square.top_left_y, p.rank))
 
     return result
     
@@ -219,6 +240,7 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
     pygame.image.save(screen, "current_view.png")
     has_completed_turn = False
     selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
+    last_clicked_piece = selected_piece
 
     valid_moves = get_movement_of_selected_piece(selected_piece)
     
@@ -245,6 +267,7 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                 # Player has clicked on a different piece
                 if main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play) is not None:
                     selected_piece = main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play)
+                    last_clicked_piece = selected_piece
                     valid_moves = get_movement_of_selected_piece(selected_piece)
 
                     unhighlighted_view_of_board = pygame.image.load("current_view.png")
@@ -256,7 +279,18 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                 elif clicked_square in valid_moves:
                     screen.blit(graphics["board"], [0, 0])
                     pygame.display.flip()
-                    current_piece_positions = find_current_piece_positions(squares)
+                    # create new non-clicked squares list
+                    non_clicked_squares = []
+                    for square in squares:
+                        if square.name != last_clicked_piece.x_position + str(last_clicked_piece.y_position):
+                            non_clicked_squares.append(square)
+                    current_piece_positions = find_current_piece_positions(non_clicked_squares)
+                    draw_piece_positions(screen, graphics, current_piece_positions)
+                    
+                    piece_name = f"{last_clicked_piece.colour}_{last_clicked_piece.rank.name.lower()}"
+                    screen.blit(graphics[piece_name], [last_clicked_piece.x_pixel_position, last_clicked_piece.y_pixel_position])
+
+                    pygame.display.flip()
                     a = 1
                 # Player has clicked somewhere else
                 else:
@@ -284,6 +318,7 @@ is_game_over = False
 pieces_in_play = main.create_pieces()
 squares = initialize_squares()
 graphics = load_graphics()
+last_clicked_piece = None
 
 background_colour = (0, 150, 250)
 #(width, height) = (0.9*GetSystemMetrics(0), 0.9*GetSystemMetrics(1))
