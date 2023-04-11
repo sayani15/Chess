@@ -12,6 +12,22 @@ import numpy as np
 
 board = pygame.image.load("chessboard.png")
 
+# def find_pixel_positions():
+#     xs = [("a", 20), ("b", 86), ("c", 152), ("d", 218), ("e", 284), ("f", 350), ("g", 416), ("h", 482)] # difference of 66 each time   # also a means left a
+#     ys = [("8", 20), ("7", 86), ("6", 152), ("5", 218), ("4", 284), ("3", 350), ("2", 416), ("1", 482)] # difference of 66 each time   # also a means left a
+    
+#     squares = []
+
+#     for x in xs:
+#         for y in ys:
+#             square = Square.Square(x[1], y[1], x+1[1], y+1[1], x[0]+y[0], "" )
+#            # square = Square.Square(x, y, x+1, y+1, x+y, "" )
+#             squares.append(square)
+    
+#     return squares
+
+
+
 def load_graphics(): 
     """Loads the images from the file.
 
@@ -116,9 +132,25 @@ def draw_piece_positions(screen: pygame.display, graphics: dict, piece_pixel_pos
         piece_name = f"{piece_pixel_position.colour}_{piece_pixel_position.rank.name.lower()}"
         screen.blit(graphics[piece_name], [piece_pixel_position.x_pixel_position, piece_pixel_position.y_pixel_position])
 
+def square_name_to_square_pixel_position(square_name: str):
+    """Converts square name to the (top left x and y) pixel positions of the square
 
+    Args:
+        square_name (str): Name (e.g. 'a6')
 
-def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel_positions]):  
+    Returns:
+        equivalent_pixel_positions (list): List of top left x and y pixel position of the square
+    """
+
+    squares = initialize_squares()
+
+    for square in squares:
+        if square.name == square_name:
+            equivalent_pixel_positions = (square.top_left_x, square.top_left_y)
+
+    return equivalent_pixel_positions
+
+def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel_positions]):  #comment needed
 
     result = []
     x_cells = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -130,7 +162,6 @@ def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel
             if p is not None:
                 for square in squares:
                     if square.name[0] == x and square.name[1] == str(y):
-                        print(square.name)
                         result.append(Piece_pixel_positions.Piece_pixel_positions(p.colour, square.top_left_x, square.top_left_y, p.rank))
 
     return result
@@ -286,7 +317,7 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                             non_clicked_squares.append(square)
                     current_piece_positions = find_current_piece_positions(non_clicked_squares)
                     draw_piece_positions(screen, graphics, current_piece_positions)
-                    
+
                     piece_name = f"{last_clicked_piece.colour}_{last_clicked_piece.rank.name.lower()}"
                     screen.blit(graphics[piece_name], [last_clicked_piece.x_pixel_position, last_clicked_piece.y_pixel_position])
 
@@ -350,9 +381,12 @@ while running:
             print(clicked_position)
             print(find_clicked_square(clicked_position, squares))    
             clicked_square = find_clicked_square(clicked_position, squares)
-            while not is_game_over:
-                if not is_white_turn:
-                    perform_black_turn(clicked_square, pieces_in_play)
-                else:
-                    perform_white_turn(clicked_square, pieces_in_play)
+            temp = find_pixel_positions()
+            print(temp)
+            #print(square_name_to_square_pixel_position(clicked_square))
+            # while not is_game_over:
+            #     if not is_white_turn:
+            #         perform_black_turn(clicked_square, pieces_in_play)
+            #     else:
+            #         perform_white_turn(clicked_square, pieces_in_play)
             
