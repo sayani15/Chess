@@ -12,21 +12,6 @@ import numpy as np
 
 board = pygame.image.load("chessboard.png")
 
-# def find_pixel_positions():
-#     xs = [("a", 20), ("b", 86), ("c", 152), ("d", 218), ("e", 284), ("f", 350), ("g", 416), ("h", 482)] # difference of 66 each time   # also a means left a
-#     ys = [("8", 20), ("7", 86), ("6", 152), ("5", 218), ("4", 284), ("3", 350), ("2", 416), ("1", 482)] # difference of 66 each time   # also a means left a
-    
-#     squares = []
-
-#     for x in xs:
-#         for y in ys:
-#             square = Square.Square(x[1], y[1], x+1[1], y+1[1], x[0]+y[0], "" )
-#            # square = Square.Square(x, y, x+1, y+1, x+y, "" )
-#             squares.append(square)
-    
-#     return squares
-
-
 
 def load_graphics(): 
     """Loads the images from the file.
@@ -305,11 +290,11 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                     screen.blit(unhighlighted_view_of_board, [0, 0])
                     pygame.display.flip()
                     highlight_squares(valid_moves)
-                    a = 1 # write the method
                 # Player has clicked on a highlighted square
                 elif clicked_square in valid_moves:
                     screen.blit(graphics["board"], [0, 0])
                     pygame.display.flip()
+                    
                     # create new non-clicked squares list
                     non_clicked_squares = []
                     for square in squares:
@@ -319,10 +304,11 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                     draw_piece_positions(screen, graphics, current_piece_positions)
 
                     piece_name = f"{last_clicked_piece.colour}_{last_clicked_piece.rank.name.lower()}"
-                    screen.blit(graphics[piece_name], [last_clicked_piece.x_pixel_position, last_clicked_piece.y_pixel_position])
+                    last_clicked_piece_pixel_position = square_name_to_square_pixel_position(clicked_square)
+                    screen.blit(graphics[piece_name], [last_clicked_piece_pixel_position[0], last_clicked_piece_pixel_position[1]])
 
                     pygame.display.flip()
-                    a = 1
+                    pygame.image.save(screen, "current_view.png")
                 # Player has clicked somewhere else
                 else:
                     unhighlighted_view_of_board = pygame.image.load("current_view.png")
@@ -381,12 +367,9 @@ while running:
             print(clicked_position)
             print(find_clicked_square(clicked_position, squares))    
             clicked_square = find_clicked_square(clicked_position, squares)
-            temp = find_pixel_positions()
-            print(temp)
-            #print(square_name_to_square_pixel_position(clicked_square))
-            # while not is_game_over:
-            #     if not is_white_turn:
-            #         perform_black_turn(clicked_square, pieces_in_play)
-            #     else:
-            #         perform_white_turn(clicked_square, pieces_in_play)
+            while not is_game_over:
+                if not is_white_turn:
+                    perform_black_turn(clicked_square, pieces_in_play)
+                else:
+                    perform_white_turn(clicked_square, pieces_in_play)
             
