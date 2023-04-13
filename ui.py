@@ -133,7 +133,7 @@ def square_name_to_square_pixel_position(square_name: str):
         if square.name == square_name:
             equivalent_pixel_positions = (square.top_left_x, square.top_left_y)
 
-    return equivalent_pixel_positions
+            return equivalent_pixel_positions
 
 def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel_positions]):  #comment needed
 
@@ -251,15 +251,11 @@ def get_movement_of_selected_piece(selected_piece: Piece):
     
     return valid_moves
             
-def perform_black_turn(clicked_square: str, pieces_in_play: list): 
+def perform_black_turn(pieces_in_play: list): 
      
     pygame.image.save(screen, "current_view.png")
     has_completed_turn = False
-    selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
-    last_clicked_piece = selected_piece
 
-    valid_moves = get_movement_of_selected_piece(selected_piece)
-    
     f = open('squareInfo.json')
     data_dictionary = json.load(f)
     f.close()
@@ -269,8 +265,11 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
     for square in data_dictionary["squares"]:
             squares.append(dictionary_to_object(square))
     
-
-    highlight_squares(valid_moves)
+    
+    #selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
+    #last_clicked_piece = selected_piece
+    #valid_moves = get_movement_of_selected_piece(selected_piece)
+       # highlight_squares(valid_moves)
 
     while not has_completed_turn:
         for event in pygame.event.get():
@@ -278,9 +277,11 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                 running = False
             if event.type == pygame.MOUSEBUTTONUP:
                 clicked_position = pygame.mouse.get_pos()
-               
                 clicked_square = find_clicked_square(clicked_position, squares)
-                # Player has clicked on a different piece
+                selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
+
+               
+                # Player has clicked on a piece
                 if main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play) is not None:
                     selected_piece = main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play)
                     last_clicked_piece = selected_piece
@@ -307,7 +308,7 @@ def perform_black_turn(clicked_square: str, pieces_in_play: list):
                     last_clicked_piece_pixel_position = square_name_to_square_pixel_position(clicked_square)
                     screen.blit(graphics[piece_name], [last_clicked_piece_pixel_position[0], last_clicked_piece_pixel_position[1]])
 
-                    pygame.display.flip()
+                    pygame.display.update()
                     pygame.image.save(screen, "current_view.png")
                 # Player has clicked somewhere else
                 else:
@@ -362,14 +363,16 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        if event.type == pygame.MOUSEBUTTONUP:
-            clicked_position = pygame.mouse.get_pos()
-            print(clicked_position)
-            print(find_clicked_square(clicked_position, squares))    
-            clicked_square = find_clicked_square(clicked_position, squares)
-            while not is_game_over:
-                if not is_white_turn:
-                    perform_black_turn(clicked_square, pieces_in_play)
-                else:
-                    perform_white_turn(clicked_square, pieces_in_play)
+        perform_black_turn(pieces_in_play)
+
+        # if event.type == pygame.MOUSEBUTTONUP:
+        #     clicked_position = pygame.mouse.get_pos()
+        #     print(clicked_position)
+        #     print(find_clicked_square(clicked_position, squares))    
+        #     clicked_square = find_clicked_square(clicked_position, squares)
+        #     while not is_game_over:
+        #         if not is_white_turn:
+        #             perform_black_turn(clicked_square, pieces_in_play)
+        #         else:
+        #             perform_white_turn(clicked_square, pieces_in_play)
             
