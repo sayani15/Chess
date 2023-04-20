@@ -127,3 +127,7 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# In memory files
+squareInfo.json
+current_view.png
