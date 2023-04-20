@@ -12,6 +12,33 @@ import numpy as np
 
 board = pygame.image.load("chessboard.png")
 
+def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
+    
+    try:
+        with open('squareInfo.json', 'r') as f:
+            data = json.load(f)
+
+        # Remove piece from previous square
+        for d in data["squares"]:
+            if previous_square_name == d["name"]:
+                d["piece_occupying"] = ""
+                break        
+            
+        # Place piece in new square    
+        for d in data["squares"]:
+            if square_name == d["name"]:
+                if d["piece_occupying"] != "":
+                    print(f"Piece in {square_name} has been taken.")
+                d["piece_occupying"] = str(moved_piece_rank)
+                break
+        
+        with open('squareInfo.json', 'w') as f:
+            json.dump(data, f)
+
+
+    except Exception as e:
+        print("Error: Unable to parse JSON data from file.")
+        print("Details:", e)
 
 def load_graphics(): 
     """Loads the images from the file.
@@ -145,7 +172,7 @@ def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel
         for y in y_cells:
             p = main.get_piece_in_the_square(x, y, pieces_in_play)
             if p is not None:
-                for square in squares:
+                for square in squares: # squares needs to come from json
                     if square.name[0] == x and square.name[1] == str(y):
                         result.append(Piece_pixel_positions.Piece_pixel_positions(p.colour, square.top_left_x, square.top_left_y, p.rank))
 
@@ -285,6 +312,7 @@ def perform_black_turn(pieces_in_play: list):
                 if main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play) is not None:
                     selected_piece = main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play)
                     last_clicked_piece = selected_piece
+                    last_clicked_pixel_positions = clicked_position
                     valid_moves = get_movement_of_selected_piece(selected_piece)
 
                     unhighlighted_view_of_board = pygame.image.load("current_view.png")
@@ -296,6 +324,8 @@ def perform_black_turn(pieces_in_play: list):
                     screen.blit(graphics["board"], [0, 0])
                     pygame.display.flip()
                     
+                    update_squareInfojson(find_clicked_square(last_clicked_pixel_positions, squares), last_clicked_piece.rank.name.lower(), clicked_square)
+
                     # create new non-clicked squares list
                     non_clicked_squares = []
                     for square in squares:
