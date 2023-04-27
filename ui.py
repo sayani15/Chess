@@ -13,6 +13,13 @@ import numpy as np
 board = pygame.image.load("chessboard.png")
 
 def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
+    """Updates "pice_occupying" part of squareInfo.json
+
+    Args:
+        previous_square_name (str): The name of the square the piece was on in the previous move
+        moved_piece_rank (str): Rank of the piece that's been moved
+        square_name (str): The name of the square that the piece has been moved to.
+    """
     
     try:
         with open('squareInfo.json', 'r') as f:
@@ -154,7 +161,7 @@ def square_name_to_square_pixel_position(square_name: str):
         equivalent_pixel_positions (list): List of top left x and y pixel position of the square
     """
 
-    squares = initialize_squares()
+    squares = update_squares_from_json()
 
     for square in squares:
         if square.name == square_name:
@@ -162,7 +169,15 @@ def square_name_to_square_pixel_position(square_name: str):
 
             return equivalent_pixel_positions
 
-def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel_positions]):  #comment needed
+def find_current_piece_positions(squares: List[Piece_pixel_positions.Piece_pixel_positions]):  
+    """Finds the piece pixel position (colour, top left x & y, rank) of each square in squares
+
+    Args:
+        squares (List[Piece_pixel_positions.Piece_pixel_positions]): List of piece pixel positions
+
+    Returns:
+        result (list of Piece_pixel_position): A list of piece pixel positions for squares
+    """
 
     result = []
     x_cells = ["a", "b", "c", "d", "e", "f", "g", "h"]
@@ -191,7 +206,7 @@ def dictionary_to_object(data_dict: dict):
 
     return square 
 
-def initialize_squares():  
+def update_squares_from_json() ->list[Square.Square]: 
     """Adds info about each square from the json file to square
 
     Returns:
@@ -287,7 +302,7 @@ def perform_black_turn(pieces_in_play: list):
     data_dictionary = json.load(f)
     f.close()
 
-    squares.clear()
+    squares = []
 
     for square in data_dictionary["squares"]:
             squares.append(dictionary_to_object(square))
@@ -324,13 +339,26 @@ def perform_black_turn(pieces_in_play: list):
                     screen.blit(graphics["board"], [0, 0])
                     pygame.display.flip()
                     
+                    # for s in squares:
+                    #     print(f"Name: {s.name}")
+                    #     print(f"Piece occupying:{s.piece_occupying}")
                     update_squareInfojson(find_clicked_square(last_clicked_pixel_positions, squares), last_clicked_piece.rank.name.lower(), clicked_square)
-
+                    squares = update_squares_from_json()
+                    print("------------------------------------------------------------------------------------")
+                    #for s in squares:
+                        # print(f"Name: {s.name}")
+                        # print(f"Piece occupying:{s.piece_occupying}")
+                    #print(f"{last_clicked_piece.x_position}{last_clicked_piece.y_position}")
                     # create new non-clicked squares list
                     non_clicked_squares = []
-                    for square in squares:
-                        if square.name != last_clicked_piece.x_position + str(last_clicked_piece.y_position):
-                            non_clicked_squares.append(square)
+                    for i in range(64):
+                        if last_clicked_piece.x_position != squares[i].name[0]:
+          #                  if last_clicked_piece.y_position != squares[i].name[1]:
+                            non_clicked_squares.append(squares[i])
+                            print(squares[i].name)
+                    # for square in squares:
+                    #     if square.name != last_clicked_piece.x_position + str(last_clicked_piece.y_position):
+                    #         non_clicked_squares.append(square)
                     current_piece_positions = find_current_piece_positions(non_clicked_squares)
                     draw_piece_positions(screen, graphics, current_piece_positions)
 
@@ -364,7 +392,7 @@ def perform_white_turn(clicked_square: str):
 is_white_turn = False   # TODO: Turn back to true when method's written
 is_game_over = False
 pieces_in_play = main.create_pieces()
-squares = initialize_squares()
+squares = update_squares_from_json()
 graphics = load_graphics()
 last_clicked_piece = None
 
