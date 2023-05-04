@@ -9,6 +9,8 @@ import piece as Piece
 from typing import List
 import main
 import numpy as np
+import PieceSprite as ps
+import time
 
 board = pygame.image.load("chessboard.png")
 
@@ -307,12 +309,6 @@ def perform_black_turn(pieces_in_play: list):
     for square in data_dictionary["squares"]:
             squares.append(dictionary_to_object(square))
     
-    
-    #selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
-    #last_clicked_piece = selected_piece
-    #valid_moves = get_movement_of_selected_piece(selected_piece)
-       # highlight_squares(valid_moves)
-
     while not has_completed_turn:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -321,7 +317,6 @@ def perform_black_turn(pieces_in_play: list):
                 clicked_position = pygame.mouse.get_pos()
                 clicked_square = find_clicked_square(clicked_position, squares)
                 selected_piece = main.get_piece_in_the_square(clicked_square[0], int(clicked_square[1]), pieces_in_play)
-
                
                 # Player has clicked on a piece
                 if main.get_piece_in_the_square(clicked_square[0], clicked_square[1], pieces_in_play) is not None:
@@ -336,38 +331,9 @@ def perform_black_turn(pieces_in_play: list):
                     highlight_squares(valid_moves)
                 # Player has clicked on a highlighted square
                 elif clicked_square in valid_moves:
-                    screen.blit(graphics["board"], [0, 0])
-                    pygame.display.flip()
-                    
-                    # for s in squares:
-                    #     print(f"Name: {s.name}")
-                    #     print(f"Piece occupying:{s.piece_occupying}")
-                    update_squareInfojson(find_clicked_square(last_clicked_pixel_positions, squares), last_clicked_piece.rank.name.lower(), clicked_square)
-                    squares = update_squares_from_json()
-                    print("------------------------------------------------------------------------------------")
-                    #for s in squares:
-                        # print(f"Name: {s.name}")
-                        # print(f"Piece occupying:{s.piece_occupying}")
-                    #print(f"{last_clicked_piece.x_position}{last_clicked_piece.y_position}")
-                    # create new non-clicked squares list
-                    non_clicked_squares = []
-                    for i in range(64):
-                        if last_clicked_piece.x_position != squares[i].name[0]:
-          #                  if last_clicked_piece.y_position != squares[i].name[1]:
-                            non_clicked_squares.append(squares[i])
-                            print(squares[i].name)
-                    # for square in squares:
-                    #     if square.name != last_clicked_piece.x_position + str(last_clicked_piece.y_position):
-                    #         non_clicked_squares.append(square)
-                    current_piece_positions = find_current_piece_positions(non_clicked_squares)
-                    draw_piece_positions(screen, graphics, current_piece_positions)
+                    # implement moving code
+                    _ = 1
 
-                    piece_name = f"{last_clicked_piece.colour}_{last_clicked_piece.rank.name.lower()}"
-                    last_clicked_piece_pixel_position = square_name_to_square_pixel_position(clicked_square)
-                    screen.blit(graphics[piece_name], [last_clicked_piece_pixel_position[0], last_clicked_piece_pixel_position[1]])
-
-                    pygame.display.update()
-                    pygame.image.save(screen, "current_view.png")
                 # Player has clicked somewhere else
                 else:
                     unhighlighted_view_of_board = pygame.image.load("current_view.png")
@@ -388,6 +354,10 @@ def perform_white_turn(clicked_square: str):
     is_white_turn = True
     return
 
+sprite_group = pygame.sprite.RenderPlain()
+test_sprite = ps.PieceSprite((300, 300))
+sprite_group.add(test_sprite)
+
 
 is_white_turn = False   # TODO: Turn back to true when method's written
 is_game_over = False
@@ -397,7 +367,6 @@ graphics = load_graphics()
 last_clicked_piece = None
 
 background_colour = (0, 150, 250)
-#(width, height) = (0.9*GetSystemMetrics(0), 0.9*GetSystemMetrics(1))
 (width, height) = (600, 600)
 
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
@@ -414,9 +383,16 @@ while running:
     screen.blit(board, [0, 0])
     screen.blit(rectangle_surface, [0, 0])
 
-    starting_positions(screen, graphics)
-    #pygame.draw.rect(screen, (54, 152, 200, 0), (20, 150, 240, 240))
+    sprite_group.draw(screen)
     pygame.display.flip()
+    time.sleep(5)
+    test_sprite.rect.x+=50
+    sprite_group.update()
+    sprite_group.draw(screen)
+    pygame.display.flip()
+
+    # starting_positions(screen, graphics)
+    # pygame.display.flip()
     
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
