@@ -49,95 +49,130 @@ def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, squa
         print("Error: Unable to parse JSON data from file.")
         print("Details:", e)
 
-def load_graphics(): 
-    """Loads the images from the file.
-
+def load_graphics(screen: pygame.display): 
+    """defines all pieces as sprites and adds them to sprite_group
     Returns:
-        Dictionary:  Dictionary containing piece name and its corresponding image.
+        None
     """
-    result = {}
-    #background
-    result["board"] = pygame.image.load("chessboard.png")
+
+    test_sprite = ps.PieceSprite((300, 500), "Pieces\\black\\pawn.png")
+    sprite_group.add(test_sprite)
+
+    # #background
+    # board_sprite = ps.PieceSprite((0, 0), "chessboard.png")
+    # sprite_group.add(board_sprite)
 
     #black pieces
-    result["black_pawn"] = pygame.image.load("Pieces\\black\\pawn.png")
+    #pawns
+    a7_black_pawn_sprite = ps.PieceSprite((26, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(a7_black_pawn_sprite)
+
+    b7_black_pawn_sprite = ps.PieceSprite((97, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(b7_black_pawn_sprite)
+
+    c7_black_pawn_sprite = ps.PieceSprite((165, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(c7_black_pawn_sprite)
+
+    d7_black_pawn_sprite = ps.PieceSprite((224, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(d7_black_pawn_sprite)
+
+    e7_black_pawn_sprite = ps.PieceSprite((295, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(e7_black_pawn_sprite)
+
+    f7_black_pawn_sprite = ps.PieceSprite((358, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(f7_black_pawn_sprite)
+
+    g7_black_pawn_sprite = ps.PieceSprite((430, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(g7_black_pawn_sprite)
+
+    h7_black_pawn_sprite = ps.PieceSprite((489, 87), "Pieces\\black\\pawn.png")
+    sprite_group.add(h7_black_pawn_sprite)
+
+    #knights
+    b8_black_knight_sprite = ps.PieceSprite((97, 17), "Pieces\\black\\knight.png")
+    sprite_group.add(b8_black_knight_sprite)
+
+    g8_black_knight_sprite = ps.PieceSprite((430, 17), "Pieces\\black\\knight.png")
+    sprite_group.add(g8_black_knight_sprite)
+
+    #bishops
+    c8_black_bishop_sprite = ps.PieceSprite((161, 17), "Pieces\\black\\bishop.png")
+    sprite_group.add(c8_black_bishop_sprite)
+
+    f8_black_bishop_sprite = ps.PieceSprite((365, 17), "Pieces\\black\\bishop.png")
+    sprite_group.add(f8_black_bishop_sprite)
+
+    #rooks
+    a8_black_rook_sprite = ps.PieceSprite((31, 17), "Pieces\\black\\rook.png")
+    sprite_group.add(a8_black_rook_sprite)
     
-    result["black_knight"] = pygame.image.load("Pieces\\black\\knight.png")
+    h8_black_rook_sprite = ps.PieceSprite((500, 17), "Pieces\\black\\rook.png")
+    sprite_group.add(h8_black_rook_sprite)
 
-    result["black_bishop"] = pygame.image.load("Pieces\\black\\bishop.png")
-
-    result["black_rook"] = pygame.image.load("Pieces\\black\\rook.png")
-
-    result["black_queen"] = pygame.image.load("Pieces\\black\\queen.png")
-
-    result["black_king"] = pygame.image.load("Pieces\\black\\king.png")
+    #queen & king
+    d8_black_queen_sprite = ps.PieceSprite((230, 17), "Pieces\\black\\queen.png")
+    sprite_group.add(d8_black_queen_sprite)
+    
+    e8_black_king_sprite = ps.PieceSprite((295, 17), "Pieces\\black\\king.png")
+    sprite_group.add(e8_black_king_sprite)
 
     #white pieces
-    result["white_pawn"] = pygame.image.load("Pieces\\white\\pawn.png")
+    #pawns
+    a2_white_pawn_sprite = ps.PieceSprite((26, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(a2_white_pawn_sprite)
+
+    b2_white_pawn_sprite = ps.PieceSprite((97, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(b2_white_pawn_sprite)
+
+    c2_white_pawn_sprite = ps.PieceSprite((165, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(c2_white_pawn_sprite)
+
+    d2_white_pawn_sprite = ps.PieceSprite((224, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(d2_white_pawn_sprite)
+
+    e2_white_pawn_sprite = ps.PieceSprite((295, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(e2_white_pawn_sprite)
+
+    f2_white_pawn_sprite = ps.PieceSprite((358, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(f2_white_pawn_sprite)
+
+    g2_white_pawn_sprite = ps.PieceSprite((430, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(g2_white_pawn_sprite)
+
+    h2_white_pawn_sprite = ps.PieceSprite((489, 428), "Pieces\\white\\pawn.png")
+    sprite_group.add(h2_white_pawn_sprite)
+
+    #knights
+    b1_white_knight_sprite = ps.PieceSprite((97, 490), "Pieces\\white\\knight.png")
+    sprite_group.add(b1_white_knight_sprite)
+
+    g1_white_knight_sprite = ps.PieceSprite((430, 490), "Pieces\\white\\knight.png")
+    sprite_group.add(g1_white_knight_sprite)
+
+    #bishops
+    c1_black_bishop_sprite = ps.PieceSprite((161, 490), "Pieces\\white\\bishop.png")
+    sprite_group.add(c1_black_bishop_sprite)
+
+    f1_black_bishop_sprite = ps.PieceSprite((365, 490), "Pieces\\white\\bishop.png")
+    sprite_group.add(f1_black_bishop_sprite)
+
+    #rooks
+    a1_black_rook_sprite = ps.PieceSprite((31, 490), "Pieces\\white\\rook.png")
+    sprite_group.add(a1_black_rook_sprite)
     
-    result["white_knight"] = pygame.image.load("Pieces\\white\\knight.png")
+    h1_black_rook_sprite = ps.PieceSprite((500, 490), "Pieces\\white\\rook.png")
+    sprite_group.add(h1_black_rook_sprite)
 
-    result["white_bishop"] = pygame.image.load("Pieces\\white\\bishop.png")
-
-    result["white_rook"] = pygame.image.load("Pieces\\white\\rook.png")
-
-    result["white_queen"] = pygame.image.load("Pieces\\white\\queen.png")
-
-    result["white_king"] = pygame.image.load("Pieces\\white\\king.png")
-
-
-    return result
-
-def starting_positions(screen: pygame.display, graphics: dict): 
-
-    """
-    Adds pieces to their starting positions on the board.
-    :param pygame.display screen: Screen to draw the images on.
-    :param dictionary graphics: Dictionary containing piece name and its corresponding image.
-    :return: none
-    """
-    screen.blit(graphics["black_pawn"], [26, 87])
-    screen.blit(graphics["black_pawn"], [97, 87])
-    screen.blit(graphics["black_pawn"], [165, 87])
-    screen.blit(graphics["black_pawn"], [224, 87])
-    screen.blit(graphics["black_pawn"], [295, 87])
-    screen.blit(graphics["black_pawn"], [358, 87])
-    screen.blit(graphics["black_pawn"], [430, 87])
-    screen.blit(graphics["black_pawn"], [489, 87])
-
-    screen.blit(graphics["black_rook"], [31, 17])
-    screen.blit(graphics["black_rook"], [500, 17])
-
-    screen.blit(graphics["black_knight"], [97, 17])
-    screen.blit(graphics["black_knight"], [430, 17])
-
-    screen.blit(graphics["black_bishop"], [161, 17])
-    screen.blit(graphics["black_bishop"], [365, 17])
-
-    screen.blit(graphics["black_queen"], [230, 17])
-    screen.blit(graphics["black_king"], [295, 17])
+    #queen & king
+    d1_black_queen_sprite = ps.PieceSprite((230, 490), "Pieces\\white\\queen.png")
+    sprite_group.add(d1_black_queen_sprite)
+    
+    e1_black_king_sprite = ps.PieceSprite((295, 490), "Pieces\\white\\king.png")
+    sprite_group.add(e1_black_king_sprite)
 
 
-    screen.blit(graphics["white_pawn"], [26, 428])
-    screen.blit(graphics["white_pawn"], [97, 428])
-    screen.blit(graphics["white_pawn"], [165, 428])
-    screen.blit(graphics["white_pawn"], [224, 428])
-    screen.blit(graphics["white_pawn"], [295, 428])
-    screen.blit(graphics["white_pawn"], [358, 428])
-    screen.blit(graphics["white_pawn"], [430, 428])
-    screen.blit(graphics["white_pawn"], [489, 428])
-
-    screen.blit(graphics["white_rook"], [31, 490])
-    screen.blit(graphics["white_rook"], [500, 490])
-
-    screen.blit(graphics["white_knight"], [97, 490])
-    screen.blit(graphics["white_knight"], [430, 490])
-
-    screen.blit(graphics["white_bishop"], [161, 490])
-    screen.blit(graphics["white_bishop"], [365, 490])
-
-    screen.blit(graphics["white_queen"], [230, 490])
-    screen.blit(graphics["white_king"], [295, 490])
+    sprite_group.draw(screen)
+    return 
 
 def draw_piece_positions(screen: pygame.display, graphics: dict, piece_pixel_positions: List[Piece_pixel_positions.Piece_pixel_positions]): 
 
@@ -355,21 +390,24 @@ def perform_white_turn(clicked_square: str):
     return
 
 sprite_group = pygame.sprite.RenderPlain()
-test_sprite = ps.PieceSprite((300, 300))
-sprite_group.add(test_sprite)
-
-
-is_white_turn = False   # TODO: Turn back to true when method's written
-is_game_over = False
-pieces_in_play = main.create_pieces()
-squares = update_squares_from_json()
-graphics = load_graphics()
-last_clicked_piece = None
+# test_sprite2 = ps.PieceSprite((400, 400), "Pieces\\white\\knight.png")
+# sprite_group.add(test_sprite2)
 
 background_colour = (0, 150, 250)
 (width, height) = (600, 600)
 
 screen = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+
+is_white_turn = False   # TODO: Turn back to true when method's written
+is_game_over = False
+pieces_in_play = main.create_pieces()
+squares = update_squares_from_json()
+graphics = load_graphics(screen)
+last_clicked_piece = None
+
+
+
+
 pygame.display.set_caption("chess")
 screen.fill(background_colour)
 rectangle_surface = pygame.Surface((1000,750))  # the size of your rect
@@ -385,10 +423,10 @@ while running:
 
     sprite_group.draw(screen)
     pygame.display.flip()
-    time.sleep(5)
-    test_sprite.rect.x+=50
-    sprite_group.update()
-    sprite_group.draw(screen)
+    # time.sleep(5)
+    # test_sprite2.rect.x+=50
+    # sprite_group.update()
+    # sprite_group.draw(screen)
     pygame.display.flip()
 
     # starting_positions(screen, graphics)
@@ -397,7 +435,7 @@ while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
-        perform_black_turn(pieces_in_play)
+        # perform_black_turn(pieces_in_play)
 
         # if event.type == pygame.MOUSEBUTTONUP:
         #     clicked_position = pygame.mouse.get_pos()
