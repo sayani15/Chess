@@ -15,7 +15,7 @@ import time
 board = pygame.image.load("chessboard.png")
 
 def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
-    """Updates "pice_occupying" part of squareInfo.json
+    """Updates "piece_occupying" part of squareInfo.json
 
     Args:
         previous_square_name (str): The name of the square the piece was on in the previous move

@@ -1,10 +1,18 @@
 import pygame
 import rank as Rank
 import helpers
+import square as Square
+from typing import List
+import piece as Piece
+import main
+import json
+import numpy as np
 
+#import gameplay_helper
 
 click_counter = 0
 selected_sprite = None
+
 
 
 class ClickableSprite(pygame.sprite.Sprite):
@@ -30,67 +38,76 @@ class ClickableSprite(pygame.sprite.Sprite):
 
 		return
 	
-	def update(self, events):
-		# for event in events:
-		# 	global click_counter					
-		# 	if event.type == pygame.MOUSEBUTTONUP:
-		# 		click_counter +=1
-		# 	if click_counter > 1:
-		# 		print("click_counter > 1")
+def update_squares_from_json() ->list[Square.Square]: 
+    """Adds info about each square from the json file to square
 
-		
-		#has_been_selected = False
-		
-		for event in events:
-			global click_counter					
-			global selected_sprite					
-			if event.type == pygame.MOUSEBUTTONUP:
-				click_counter +=1
+    Returns:
+        squares (list): List of square
+    """
+    squares = []
 
-				for sprite in group:	
-					if selected_sprite != None and click_counter > 1:
-						clicked_pos_x = event.pos[0]
-						clicked_pos_y = event.pos[1]	
-						self.callback(selected_sprite, clicked_pos_x, clicked_pos_y)						
-					if sprite.rect.collidepoint(event.pos):					
-						selected_sprite = sprite
-						valid_moves = helpers.get_valid_moves(selected_sprite)
-						# try:
-						# 	global click_counter 
-						# except NameError:
-						# 	print("click_counter not found")	
-						break
+    f = open('squareInfo.json')
+    data_dictionary = json.load(f)
+    f.close()
 
-			
+    for square in data_dictionary["squares"]:
+        squares.append(helpers.dictionary_to_object(square))    
 
-						
-				# try:
-				# 	selected_sprite 
-				# except NameError:
-				# 	continue
-				# if selected_sprite != None:					
-				# 	clicked_pos_x = event.pos[0]
-				# 	clicked_pos_y = event.pos[1]	
-				# 	self.callback(selected_sprite, clicked_pos_x, clicked_pos_y)
+    return squares
 
+def find_clicked_square(clicked_pos_x: int, clicked_pos_y: int, squares: List[Square.Square]) -> Square.Square: 
+    """Finds the clicked square object when given coordinates of position.
 
-			# if event.type == pygame.MOUSEBUTTONUP:
-			# 	for sprite in group:						
-			# 		# selected_sprite = None
-			# 		if sprite.rect.collidepoint(event.pos):					
-			# 			selected_sprite = sprite	
-			# 			break
-			# 	try:
-			# 		selected_sprite 
-			# 	except NameError:
-			# 		continue
-			# 	if selected_sprite != None:					
-			# 		clicked_pos_x = event.pos[0]
-			# 		clicked_pos_y = event.pos[1]	
-			# 		self.callback(selected_sprite, clicked_pos_x, clicked_pos_y)
-				
+    Args:
+        clicked_pos_x (int): x coordinate of clicked position 
+        clicked_pos_y (int): y coordinate of clicked position 
+        squares (List[Square.Square]): List of squares
 
+    Returns:
+        square (Square): Square
+    """
+    #TODO: If user clicks outside grid 
+    for square in squares:
+        if clicked_pos_x > square.top_left_x and clicked_pos_x < square.bottom_right_x and \
+        	clicked_pos_y > square.top_left_y and clicked_pos_y < square.bottom_right_y:
+            return square
 
+def handle_clicks(self, *args, **kwargs):
+	if len(events) > 0:
+		if events[0].type == pygame.MOUSEBUTTONUP:
+			try:
+				global first_clicked_square
+			except Exception as e:
+				print(e)
+			finally:
+				global first_clicked_square
+				clicked_pos_x, clicked_pos_y = events[0].pos[0], events[0].pos[1]
+				print(clicked_pos_x, clicked_pos_y)
+				squares = update_squares_from_json()
+				clicked_square = find_clicked_square(clicked_pos_x, clicked_pos_y, squares)
+				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
+				if first_clicked_square is None and clicked_square.piece_occupying != "":			
+					first_clicked_square = clicked_square
+				# test for whether we're on the second click, and whether there's a piece in the square being moved to
+				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
+					# square to move to is occupied logic
+					# TODO Implement taking pieces
+					print("Piece in square. Cannot move.")
+				# if on second click and clicked square is unoccupied, 
+				elif first_clicked_square is not None and clicked_square.piece_occupying == "":
+					# move piece logic
+					_ = 1
+					for sprite in group:
+						#checking if the centre point falls between the range of x values for the square and same with y.
+						if sprite.rect.centerx > first_clicked_square.top_left_x and sprite.rect.centerx < first_clicked_square.bottom_right_x:
+							if sprite.rect.centery > first_clicked_square.top_left_y and sprite.rect.centery < first_clicked_square.bottom_right_y:
+								selected_sprite = sprite
+					
+
+					on_click(selected_sprite, clicked_pos_x, clicked_pos_y)
+					helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
+					first_clicked_square = None
+					selected_sprite = None
 
 def on_click(selected_sprite, clicked_pos_x, clicked_pos_y):
 	selected_sprite.movement(clicked_pos_x, clicked_pos_y)
@@ -101,6 +118,8 @@ def on_click(selected_sprite, clicked_pos_x, clicked_pos_y):
 pygame.init()
 screen = pygame.display.set_mode((570, 570))
 pygame.display.flip()
+
+first_clicked_square = None
 
 a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
 
@@ -121,7 +140,7 @@ while running:
 		if event.type == pygame.QUIT:
 			running = False
 
-	group.update(events)
+	handle_clicks(events)
 	screen.blit(pygame.image.load("chessboard.png"), [0, 0])
 	pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(20, 10, 70, 70))
 
