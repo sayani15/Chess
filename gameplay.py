@@ -7,13 +7,11 @@ import piece as Piece
 import main
 import json
 import numpy as np
+import PieceSprite as ps
 
-#import gameplay_helper
 
 click_counter = 0
 selected_sprite = None
-
-
 
 class ClickableSprite(pygame.sprite.Sprite):
 	def __init__(self, image_file_path: str, x: int, y: int, callback, colour: str, rank: Rank, move_counter: int):
@@ -46,14 +44,52 @@ def update_squares_from_json() ->list[Square.Square]:
     """
     squares = []
 
-    f = open('squareInfo.json')
-    data_dictionary = json.load(f)
-    f.close()
+    with open('squareInfo.json', 'r') as file:
+        data_dictionary = json.load(file)
+
+    # f = open('squareInfo.json')
+    # data_dictionary = json.load(f)
+    # f.close()
 
     for square in data_dictionary["squares"]:
         squares.append(helpers.dictionary_to_object(square))    
 
     return squares
+
+def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
+    """Updates "piece_occupying" part of squareInfo.json
+
+    Args:
+        previous_square_name (str): The name of the square the piece was on in the previous move
+        moved_piece_rank (str): Rank of the piece that's been moved
+        square_name (str): The name of the square that the piece has been moved to.
+    """
+    
+    try:
+        with open('squareInfo.json', 'r') as f:
+            data = json.load(f)
+
+        # Remove piece from previous square
+        for d in data["squares"]:
+            if previous_square_name == d["name"]:
+                d["piece_occupying"] = ""
+                break        
+            
+        # Place piece in new square    
+        for d in data["squares"]:
+            if square_name == d["name"]:
+                if d["piece_occupying"] != "":
+                    print(f"Piece in {square_name} has been taken.")
+                d["piece_occupying"] = str(moved_piece_rank)
+                break
+        
+        with open('squareInfo.json', 'w') as f:
+            json.dump(data, f, indent=4)
+
+
+    except Exception as e:
+        print("Error: Unable to parse JSON data from file.")
+        print("Details:", e)
 
 def find_clicked_square(clicked_pos_x: int, clicked_pos_y: int, squares: List[Square.Square]) -> Square.Square: 
     """Finds the clicked square object when given coordinates of position.
@@ -113,7 +149,6 @@ def on_click(selected_sprite, clicked_pos_x, clicked_pos_y):
 	selected_sprite.movement(clicked_pos_x, clicked_pos_y)
 	# a1_black_rook_sprite.visible = not a1_black_rook_sprite.visible
 
-
 	
 pygame.init()
 screen = pygame.display.set_mode((570, 570))
@@ -121,17 +156,35 @@ pygame.display.flip()
 
 first_clicked_square = None
 
-a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
+group = pygame.sprite.RenderPlain()
 
+a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
 white_bishop = ClickableSprite("Pieces\\white\\bishop.png", 50, 50, on_click, "white", 3, 0)
 h1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 500, 490, on_click, "white", 4, 0)
 
+group.add(white_bishop, a1_white_rook_sprite, h1_white_rook_sprite)
 
-group = pygame.sprite.RenderPlain(a1_white_rook_sprite, white_bishop, h1_white_rook_sprite)
+def load_graphics(): 
+    """defines all pieces as sprites and adds them to group
+    Returns:
+        group of sprites
+    """
 
-# group.add(a1_black_rook_sprite)
-# group.add(sprite)
-# group.add(h1_black_rook_sprite)
+    a2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 26, 428, on_click, "white", 1, 0)
+    b2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 97, 428, on_click, "white", 1, 0)
+    c2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 165, 428, on_click, "white", 1, 0)
+    d2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 224, 428, on_click, "white", 1, 0)
+    e2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 295, 428, on_click, "white", 1, 0)
+    f2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 358, 428, on_click, "white", 1, 0)
+    g2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 430, 428, on_click, "white", 1, 0)
+    h2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 489, 428, on_click, "white", 1, 0)
+
+    group.add(a2_white_pawn_sprite, b2_white_pawn_sprite, c2_white_pawn_sprite, d2_white_pawn_sprite, 
+          e2_white_pawn_sprite, f2_white_pawn_sprite, g2_white_pawn_sprite, h2_white_pawn_sprite)    
+    
+    return group
+
+group = load_graphics()
 
 running = True
 while running:
@@ -150,6 +203,5 @@ while running:
 	pygame.display.update()
 
 	# pygame.display.flip()
-
 
 pygame.quit()
