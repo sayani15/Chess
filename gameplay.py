@@ -56,40 +56,40 @@ def update_squares_from_json() ->list[Square.Square]:
 
     return squares
 
-def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
-    """Updates "piece_occupying" part of squareInfo.json
+# def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
+#     """Updates "piece_occupying" part of squareInfo.json
 
-    Args:
-        previous_square_name (str): The name of the square the piece was on in the previous move
-        moved_piece_rank (str): Rank of the piece that's been moved
-        square_name (str): The name of the square that the piece has been moved to.
-    """
+#     Args:
+#         previous_square_name (str): The name of the square the piece was on in the previous move
+#         moved_piece_rank (str): Rank of the piece that's been moved
+#         square_name (str): The name of the square that the piece has been moved to.
+#     """
     
-    try:
-        with open('squareInfo.json', 'r') as f:
-            data = json.load(f)
+#     try:
+#         with open('squareInfo.json', 'r') as f:
+#             data = json.load(f)
 
-        # Remove piece from previous square
-        for d in data["squares"]:
-            if previous_square_name == d["name"]:
-                d["piece_occupying"] = ""
-                break        
+#         # Remove piece from previous square
+#         for d in data["squares"]:
+#             if previous_square_name == d["name"]:
+#                 d["piece_occupying"] = ""
+#                 break        
             
-        # Place piece in new square    
-        for d in data["squares"]:
-            if square_name == d["name"]:
-                if d["piece_occupying"] != "":
-                    print(f"Piece in {square_name} has been taken.")
-                d["piece_occupying"] = str(moved_piece_rank)
-                break
-        
-        with open('squareInfo.json', 'w') as f:
-            json.dump(data, f, indent=4)
+#         # Place piece in new square    
+#         for d in data["squares"]:
+#             if square_name == d["name"]:
+#                 if d["piece_occupying"] != "":
+#                     print(f"Piece in {square_name} has been taken.")
+#                 d["piece_occupying"] = str(moved_piece_rank)
+#                 break
+	    
+#         with open('squareInfo.json', 'w') as f:
+#             json.dump(data, f, indent=4)
 
 
-    except Exception as e:
-        print("Error: Unable to parse JSON data from file.")
-        print("Details:", e)
+#     except Exception as e:
+#         print("Error: Unable to parse JSON data from file.")
+#         print("Details:", e)
 
 def find_clicked_square(clicked_pos_x: int, clicked_pos_y: int, squares: List[Square.Square]) -> Square.Square: 
     """Finds the clicked square object when given coordinates of position.
@@ -124,26 +124,29 @@ def handle_clicks(self, *args, **kwargs):
 				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
 				if first_clicked_square is None and clicked_square.piece_occupying != "":			
 					first_clicked_square = clicked_square
+					print("first click")
 				# test for whether we're on the second click, and whether there's a piece in the square being moved to
 				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
 					# square to move to is occupied logic
 					# TODO Implement taking pieces
 					print("Piece in square. Cannot move.")
+					print("second click")
 				# if on second click and clicked square is unoccupied, 
 				elif first_clicked_square is not None and clicked_square.piece_occupying == "":
 					# move piece logic
 					_ = 1
+					print("second click")
+
 					for sprite in group:
 						#checking if the centre point falls between the range of x values for the square and same with y.
 						if sprite.rect.centerx > first_clicked_square.top_left_x and sprite.rect.centerx < first_clicked_square.bottom_right_x:
 							if sprite.rect.centery > first_clicked_square.top_left_y and sprite.rect.centery < first_clicked_square.bottom_right_y:
 								selected_sprite = sprite
-					
-
-					on_click(selected_sprite, clicked_pos_x, clicked_pos_y)
-					helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
-					first_clicked_square = None
-					selected_sprite = None
+					if selected_sprite:
+						on_click(selected_sprite, clicked_pos_x, clicked_pos_y)
+						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
+						first_clicked_square = None
+						selected_sprite = None
 
 def on_click(selected_sprite, clicked_pos_x, clicked_pos_y):
 	selected_sprite.movement(clicked_pos_x, clicked_pos_y)
@@ -158,11 +161,11 @@ first_clicked_square = None
 
 group = pygame.sprite.RenderPlain()
 
-a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
-white_bishop = ClickableSprite("Pieces\\white\\bishop.png", 50, 50, on_click, "white", 3, 0)
-h1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 500, 490, on_click, "white", 4, 0)
+# a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
+# white_bishop = ClickableSprite("Pieces\\white\\bishop.png", 50, 50, on_click, "white", 3, 0)
+# h1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 500, 490, on_click, "white", 4, 0)
 
-group.add(white_bishop, a1_white_rook_sprite, h1_white_rook_sprite)
+# group.add(white_bishop, a1_white_rook_sprite, h1_white_rook_sprite)
 
 def load_graphics(): 
     """defines all pieces as sprites and adds them to group
@@ -178,10 +181,15 @@ def load_graphics():
     f2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 358, 428, on_click, "white", 1, 0)
     g2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 430, 428, on_click, "white", 1, 0)
     h2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 489, 428, on_click, "white", 1, 0)
-
+    	
+    a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
+    c1_white_bishop_sprite = ClickableSprite("Pieces\\white\\bishop.png", 151, 482, on_click, "white", 3, 0)
+    h1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 500, 490, on_click, "white", 4, 0)
+    	
     group.add(a2_white_pawn_sprite, b2_white_pawn_sprite, c2_white_pawn_sprite, d2_white_pawn_sprite, 
-          e2_white_pawn_sprite, f2_white_pawn_sprite, g2_white_pawn_sprite, h2_white_pawn_sprite)    
-    
+          e2_white_pawn_sprite, f2_white_pawn_sprite, g2_white_pawn_sprite, h2_white_pawn_sprite,
+		  a1_white_rook_sprite, c1_white_bishop_sprite, h1_white_rook_sprite)  
+          
     return group
 
 group = load_graphics()
@@ -197,8 +205,8 @@ while running:
 	screen.blit(pygame.image.load("chessboard.png"), [0, 0])
 	pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(20, 10, 70, 70))
 
-	if white_bishop.visible:
-		group.draw(screen)	
+
+	group.draw(screen)	
 
 	pygame.display.update()
 

@@ -61,8 +61,9 @@ def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, squa
                 d["piece_occupying"] = str(moved_piece_rank)
                 break
         
+
         with open('squareInfo.json', 'w') as f:
-            json.dump(data, f)
+            json.dump(data, f, indent = 4)
 
 
     except Exception as e:
