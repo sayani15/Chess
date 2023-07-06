@@ -91,6 +91,41 @@ def update_squares_from_json() ->list[Square.Square]:
 #         print("Error: Unable to parse JSON data from file.")
 #         print("Details:", e)
 
+def highlight_squares(valid_moves: List[str]): 
+    """Draws rectangles to highlight the squares that are part of the valid_moves for selected_piece.
+
+    Args:
+        squares (List[Square.Square]): A list of all squares
+    """
+    squares_to_highlight = []
+    squares = update_squares_from_json()
+
+
+    for valid_move in valid_moves:
+        for square in squares:
+            if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
+                squares_to_highlight.append(square)
+
+    for square in squares_to_highlight:
+        width = np.abs(square.bottom_right_x - square.top_left_x)
+        height = np.abs(square.bottom_right_y - square.top_left_y)
+
+        #pygame.draw.rect(screen, (54, 152, 200, 0), (pygame.Rect(square.top_left_x, square.top_left_y, width, height)))
+        pygame.draw.rect(screen, (54, 152, 200), pygame.Rect(30, 50, 70, 70))
+        pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(80, 10, 70, 70))
+
+    pygame.display.flip()
+
+    return
+
+def find_selected_sprite_from_clicked_square(group: pygame.sprite.RenderPlain, clicked_square: Square.Square):
+	for sprite in group:
+		#checking if the centre point falls between the range of x values for the square and same with y.
+		if sprite.rect.centerx > clicked_square.top_left_x and sprite.rect.centerx < clicked_square.bottom_right_x:
+			if sprite.rect.centery > clicked_square.top_left_y and sprite.rect.centery < clicked_square.bottom_right_y:
+				selected_sprite = sprite
+				return selected_sprite
+
 def find_clicked_square(clicked_pos_x: int, clicked_pos_y: int, squares: List[Square.Square]) -> Square.Square: 
     """Finds the clicked square object when given coordinates of position.
 
@@ -124,7 +159,12 @@ def handle_clicks(self, *args, **kwargs):
 				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
 				if first_clicked_square is None and clicked_square.piece_occupying != "":			
 					first_clicked_square = clicked_square
+					# find and highlight required squares
 					print("first click")
+					selected_sprite = find_selected_sprite_from_clicked_square(group, clicked_square)
+					valid_moves = helpers.get_valid_moves(selected_sprite)
+					# highlight_squares(valid_moves)
+					return (50, 50)
 				# test for whether we're on the second click, and whether there's a piece in the square being moved to
 				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
 					# square to move to is occupied logic
@@ -137,16 +177,13 @@ def handle_clicks(self, *args, **kwargs):
 					_ = 1
 					print("second click")
 
-					for sprite in group:
-						#checking if the centre point falls between the range of x values for the square and same with y.
-						if sprite.rect.centerx > first_clicked_square.top_left_x and sprite.rect.centerx < first_clicked_square.bottom_right_x:
-							if sprite.rect.centery > first_clicked_square.top_left_y and sprite.rect.centery < first_clicked_square.bottom_right_y:
-								selected_sprite = sprite
+					selected_sprite = find_selected_sprite_from_clicked_square(group, first_clicked_square )
 					if selected_sprite:
 						on_click(selected_sprite, clicked_pos_x, clicked_pos_y)
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
 						first_clicked_square = None
 						selected_sprite = None
+
 
 def on_click(selected_sprite, clicked_pos_x, clicked_pos_y):
 	selected_sprite.movement(clicked_pos_x, clicked_pos_y)
@@ -173,6 +210,8 @@ def load_graphics():
         group of sprites
     """
 
+	# white
+	# pawns
     a2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 26, 428, on_click, "white", 1, 0)
     b2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 97, 428, on_click, "white", 1, 0)
     c2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 165, 428, on_click, "white", 1, 0)
@@ -180,16 +219,65 @@ def load_graphics():
     e2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 295, 428, on_click, "white", 1, 0)
     f2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 358, 428, on_click, "white", 1, 0)
     g2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 430, 428, on_click, "white", 1, 0)
-    h2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 489, 428, on_click, "white", 1, 0)
-    	
+    h2_white_pawn_sprite = ClickableSprite("Pieces\\white\\pawn.png", 489, 428, on_click, "white", 1, 0)    
+    
+	# rooks
     a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
-    c1_white_bishop_sprite = ClickableSprite("Pieces\\white\\bishop.png", 151, 482, on_click, "white", 3, 0)
     h1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 500, 490, on_click, "white", 4, 0)
+
+	# knights
+    b1_white_knight_sprite = ClickableSprite("Pieces\\white\\knight.png", 97, 490, on_click, "white", 2, 0)
+    g1_white_knight_sprite = ClickableSprite("Pieces\\white\\knight.png", 430, 490, on_click, "white", 2, 0)
+
+	# bishops
+    c1_white_bishop_sprite = ClickableSprite("Pieces\\white\\bishop.png", 165, 490, on_click, "white", 3, 0)
+    f1_white_bishop_sprite = ClickableSprite("Pieces\\white\\bishop.png", 358, 490, on_click, "white", 3, 0)
+
+	# king and queen
+    d1_white_queen_sprite = ClickableSprite("Pieces\\white\\queen.png", 224, 490, on_click, "white", 5, 0)
+    e1_white_king_sprite = ClickableSprite("Pieces\\white\\king.png", 295, 490, on_click, "white", 6, 0)
+    
+    
+	# black
+	# pawns
+    a7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 26, 87, on_click, "black", 1, 0)
+    b7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 97, 87, on_click, "black", 1, 0)
+    c7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 165, 87, on_click, "black", 1, 0)
+    d7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 224, 87, on_click, "black", 1, 0)
+    e7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 295, 87, on_click, "black", 1, 0)
+    f7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 358, 87, on_click, "black", 1, 0)
+    g7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 430, 87, on_click, "black", 1, 0)
+    h7_black_pawn_sprite = ClickableSprite("Pieces\\black\\pawn.png", 489, 87, on_click, "black", 1, 0)
     	
+	# rook
+    a8_black_rook_sprite = ClickableSprite("Pieces\\black\\rook.png", 31, 17, on_click, "black", 4, 0)
+    h8_black_rook_sprite = ClickableSprite("Pieces\\black\\rook.png", 500, 17, on_click, "black", 4, 0)
+
+	# knight
+    b8_black_knight_sprite = ClickableSprite("Pieces\\black\\knight.png", 97, 17, on_click, "black", 2, 0)
+    g8_black_knight_sprite = ClickableSprite("Pieces\\black\\knight.png", 430, 17, on_click, "black", 2, 0)
+
+	# bishop
+    c8_black_bishop_sprite = ClickableSprite("Pieces\\black\\bishop.png", 165, 17, on_click, "black", 3, 0)
+    f8_black_bishop_sprite = ClickableSprite("Pieces\\black\\bishop.png", 358, 17, on_click, "black", 3, 0)
+
+	# king & queen
+    d8_black_queen_sprite = ClickableSprite("Pieces\\black\\queen.png", 224, 17, on_click, "black", 5, 0)
+    e8_black_king_sprite = ClickableSprite("Pieces\\black\\king.png", 290, 17, on_click, "black", 6, 0)
+    
+
+	# white
     group.add(a2_white_pawn_sprite, b2_white_pawn_sprite, c2_white_pawn_sprite, d2_white_pawn_sprite, 
-          e2_white_pawn_sprite, f2_white_pawn_sprite, g2_white_pawn_sprite, h2_white_pawn_sprite,
-		  a1_white_rook_sprite, c1_white_bishop_sprite, h1_white_rook_sprite)  
-          
+        e2_white_pawn_sprite, f2_white_pawn_sprite, g2_white_pawn_sprite, h2_white_pawn_sprite,
+		a1_white_rook_sprite, b1_white_knight_sprite, c1_white_bishop_sprite, d1_white_queen_sprite,
+		e1_white_king_sprite, f1_white_bishop_sprite, g1_white_knight_sprite, h1_white_rook_sprite) 
+       
+	# black
+    group.add(a7_black_pawn_sprite, b7_black_pawn_sprite, c7_black_pawn_sprite, d7_black_pawn_sprite, 
+    	e7_black_pawn_sprite, f7_black_pawn_sprite, g7_black_pawn_sprite, h7_black_pawn_sprite,
+	    a8_black_rook_sprite, b8_black_knight_sprite, c8_black_bishop_sprite, d8_black_queen_sprite,
+    	e8_black_king_sprite, f8_black_bishop_sprite, g8_black_knight_sprite, h8_black_rook_sprite) 
+       
     return group
 
 group = load_graphics()
@@ -201,10 +289,12 @@ while running:
 		if event.type == pygame.QUIT:
 			running = False
 
-	handle_clicks(events)
-	screen.blit(pygame.image.load("chessboard.png"), [0, 0])
-	pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(20, 10, 70, 70))
-
+	screen.blit(pygame.image.load("chessboard.png"), [0, 0])	
+	t = handle_clicks(events)
+	if t:
+		pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(80, 80, 70, 70))
+	# highlight_squares(["b2", "b3"])
+	pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(20, 50, 70, 70))
 
 	group.draw(screen)	
 

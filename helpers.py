@@ -6,6 +6,7 @@ import square as Square
 from typing import List
 import pygame
 import numpy as np
+from enum import Enum
 
 def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ): 
     """Finds the name of the square when given coordinates of position.
@@ -83,77 +84,56 @@ def dictionary_to_object(data_dict: dict):
 
     return square 
 
-# def get_valid_moves(selected_sprite: gameplay.ClickableSprite): 
-#     """Finds the rank of the player's selected piece and returns the valid moves for the piece in its current position.
 
-#     Args:
-#         selected_piece (Piece): The piece that has been selected by the player.
-
-#     Raises:
-#         Exception: Raises exception if selected_piece's rank does not match a valid rank.
-
-#     Returns:
-#         valid_moves (list) : List of available moves for the piece.
-#     """
-#     pieces_in_play = main.create_pieces()
-#     clicked_square_name = _find_clicked_square((selected_sprite.x, selected_sprite.y), _get_squares())
-#     piece = Piece(selected_sprite.colour, clicked_square_name[0], clicked_square_name[1], selected_sprite.rank, selected_sprite.move_counter)
-
-#     if selected_sprite.rank == Rank.Rank.pawn:
-#         valid_moves = main.pawn_movement(pieces_in_play, piece)
-#     elif selected_sprite.rank == Rank.Rank.knight:
-#         valid_moves = main.knight_movement(pieces_in_play, piece)
-#     elif selected_sprite.rank == Rank.Rank.bishop:
-#         valid_moves = main.bishop_movement(pieces_in_play, piece)
-#     elif selected_sprite.rank == Rank.Rank.rook:
-#         valid_moves = main.rook_movement(pieces_in_play, piece)
-#     elif selected_sprite.rank == Rank.Rank.queen:
-#         valid_moves = main.queen_movement(pieces_in_play, piece)
-#     elif selected_sprite.rank == Rank.Rank.king:
-#         valid_moves = main.king_movement(pieces_in_play, piece)  
-#     else:
-#         raise Exception     
     
-#     return valid_moves
 
-# def update_squares_from_json() ->list[Square.Square]: 
-#     """Adds info about each square from the json file to square
+def get_valid_moves(selected_sprite: pygame.sprite): 
+    """Finds the rank of the player's selected piece and returns the valid moves for the piece in its current position.
 
-#     Returns:
-#         squares (list): List of square
-#     """
-#     squares = []
+    Args:
+        selected_piece (Piece): The piece that has been selected by the player.
 
-#     f = open('squareInfo.json')
-#     data_dictionary = json.load(f)
-#     f.close()
+    Raises:
+        Exception: Raises exception if selected_piece's rank does not match a valid rank.
 
-#     for square in data_dictionary["squares"]:
-#         squares.append(_dictionary_to_object(square))    
+    Returns:
+        valid_moves (list) : List of available moves for the piece.
+    """
+    pieces_in_play = main.create_pieces()
+    clicked_square_name = find_clicked_square((selected_sprite.rect.centerx, selected_sprite.rect.centery), get_squares())
+    piece = Piece.Piece(selected_sprite.colour, clicked_square_name[0], int(clicked_square_name[1]), selected_sprite.rank, selected_sprite.move_counter)
 
-#     return squares
+    if selected_sprite.rank == Rank.Rank.pawn.value:
+        valid_moves = main.pawn_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.knight.value:
+        valid_moves = main.knight_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.bishop.value:
+        valid_moves = main.bishop_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.rook.value:
+        valid_moves = main.rook_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.queen.value:
+        valid_moves = main.queen_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.king.value:
+        valid_moves = main.king_movement(pieces_in_play, piece)  
+    else:
+        raise Exception     
+    
+    return valid_moves
 
-# def highlight_squares(valid_moves: List[str]): 
-#     """Draws rectangles to highlight the squares that are part of the valid_moves for selected_piece.
+def update_squares_from_json() ->list[Square.Square]: 
+    """Adds info about each square from the json file to square
 
-#     Args:
-#         squares (List[Square.Square]): A list of all squares
-#     """
-#     squares_to_highlight = []
-#     squares = update_squares_from_json()
+    Returns:
+        squares (list): List of square
+    """
+    squares = []
 
+    f = open('squareInfo.json')
+    data_dictionary = json.load(f)
+    f.close()
 
-#     for valid_move in valid_moves:
-#         for square in squares:
-#             if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
-#                 squares_to_highlight.append(square)
+    for square in data_dictionary["squares"]:
+        squares.append(dictionary_to_object(square))    
 
-#     for square in squares_to_highlight:
-#         width = np.abs(square.bottom_right_x - square.top_left_x)
-#         height = np.abs(square.bottom_right_y - square.top_left_y)
+    return squares
 
-#         pygame.draw.rect(gameplay.screen, (54, 152, 200, 0), (square.top_left_x, square.top_left_y, width, height))
-
-#     pygame.display.flip()
-
-#     return
