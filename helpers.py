@@ -85,19 +85,17 @@ def dictionary_to_object(data_dict: dict):
     return square 
 
 
-    
-
 def get_valid_moves(selected_sprite: pygame.sprite): 
-    """Finds the rank of the player's selected piece and returns the valid moves for the piece in its current position.
+    """Finds the rank of the player's selected sprite and returns the valid moves for it in its current position.
 
     Args:
-        selected_piece (Piece): The piece that has been selected by the player.
+        selected_sprite (pygame.sprite): The sprite that has been selected by the player.
 
     Raises:
-        Exception: Raises exception if selected_piece's rank does not match a valid rank.
+        Exception: Raises exception if selected_sprite's rank does not match a valid rank.
 
     Returns:
-        valid_moves (list) : List of available moves for the piece.
+        valid_moves (list) : List of available moves for the sprite piece.
     """
     pieces_in_play = main.create_pieces()
     clicked_square_name = find_clicked_square((selected_sprite.rect.centerx, selected_sprite.rect.centery), get_squares())

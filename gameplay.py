@@ -56,41 +56,6 @@ def update_squares_from_json() ->list[Square.Square]:
 
     return squares
 
-# def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
-#     """Updates "piece_occupying" part of squareInfo.json
-
-#     Args:
-#         previous_square_name (str): The name of the square the piece was on in the previous move
-#         moved_piece_rank (str): Rank of the piece that's been moved
-#         square_name (str): The name of the square that the piece has been moved to.
-#     """
-    
-#     try:
-#         with open('squareInfo.json', 'r') as f:
-#             data = json.load(f)
-
-#         # Remove piece from previous square
-#         for d in data["squares"]:
-#             if previous_square_name == d["name"]:
-#                 d["piece_occupying"] = ""
-#                 break        
-            
-#         # Place piece in new square    
-#         for d in data["squares"]:
-#             if square_name == d["name"]:
-#                 if d["piece_occupying"] != "":
-#                     print(f"Piece in {square_name} has been taken.")
-#                 d["piece_occupying"] = str(moved_piece_rank)
-#                 break
-	    
-#         with open('squareInfo.json', 'w') as f:
-#             json.dump(data, f, indent=4)
-
-
-#     except Exception as e:
-#         print("Error: Unable to parse JSON data from file.")
-#         print("Details:", e)
-
 def highlight_squares(valid_moves: List[str]): 
     """Draws rectangles to highlight the squares that are part of the valid_moves for selected_piece.
 
@@ -110,15 +75,22 @@ def highlight_squares(valid_moves: List[str]):
         width = np.abs(square.bottom_right_x - square.top_left_x)
         height = np.abs(square.bottom_right_y - square.top_left_y)
 
-        #pygame.draw.rect(screen, (54, 152, 200, 0), (pygame.Rect(square.top_left_x, square.top_left_y, width, height)))
-        pygame.draw.rect(screen, (54, 152, 200), pygame.Rect(30, 50, 70, 70))
-        pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(80, 10, 70, 70))
-
+        pygame.draw.rect(screen, (54, 152, 200, 0), (pygame.Rect(square.top_left_x, square.top_left_y, width, height)))
+       
     pygame.display.flip()
 
     return
 
 def find_selected_sprite_from_clicked_square(group: pygame.sprite.RenderPlain, clicked_square: Square.Square):
+	"""Finds the selected_sprite using the clicked_square.
+
+	Args:
+		group (pygame.sprite.RenderPlain): A group of all the sprites.
+		clicked_square (Square.Square): The square that has been clicked
+
+	Returns:
+		pygame.sprite: The sprite that is in the clicked square
+	"""
 	for sprite in group:
 		#checking if the centre point falls between the range of x values for the square and same with y.
 		if sprite.rect.centerx > clicked_square.top_left_x and sprite.rect.centerx < clicked_square.bottom_right_x:
@@ -163,8 +135,7 @@ def handle_clicks(self, *args, **kwargs):
 					print("first click")
 					selected_sprite = find_selected_sprite_from_clicked_square(group, clicked_square)
 					valid_moves = helpers.get_valid_moves(selected_sprite)
-					# highlight_squares(valid_moves)
-					return (50, 50)
+					return valid_moves
 				# test for whether we're on the second click, and whether there's a piece in the square being moved to
 				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
 					# square to move to is occupied logic
@@ -183,12 +154,12 @@ def handle_clicks(self, *args, **kwargs):
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
 						first_clicked_square = None
 						selected_sprite = None
+						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
+
 
 
 def on_click(selected_sprite, clicked_pos_x, clicked_pos_y):
 	selected_sprite.movement(clicked_pos_x, clicked_pos_y)
-	# a1_black_rook_sprite.visible = not a1_black_rook_sprite.visible
-
 	
 pygame.init()
 screen = pygame.display.set_mode((570, 570))
@@ -198,11 +169,6 @@ first_clicked_square = None
 
 group = pygame.sprite.RenderPlain()
 
-# a1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 31, 490, on_click, "white", 4, 0)
-# white_bishop = ClickableSprite("Pieces\\white\\bishop.png", 50, 50, on_click, "white", 3, 0)
-# h1_white_rook_sprite = ClickableSprite("Pieces\\white\\rook.png", 500, 490, on_click, "white", 4, 0)
-
-# group.add(white_bishop, a1_white_rook_sprite, h1_white_rook_sprite)
 
 def load_graphics(): 
     """defines all pieces as sprites and adds them to group
@@ -281,25 +247,32 @@ def load_graphics():
     return group
 
 group = load_graphics()
+screen.blit(pygame.image.load("chessboard.png"), [0, 0])
+
 
 running = True
-while running:
+while running:  
 	events = pygame.event.get()
 	for event in events:
 		if event.type == pygame.QUIT:
 			running = False
 
-	screen.blit(pygame.image.load("chessboard.png"), [0, 0])	
-	t = handle_clicks(events)
-	if t:
-		pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(80, 80, 70, 70))
-	# highlight_squares(["b2", "b3"])
-	pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(20, 50, 70, 70))
+	vm = handle_clicks(events)
+	
+	squares_to_highlight = []
+	squares = update_squares_from_json()
+
+	if vm is not None:
+		for valid_move in vm:
+			for square in squares:
+				if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
+					squares_to_highlight.append(square)
+
+		for square in squares_to_highlight:
+			pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) # always does this and the stuff below
 
 	group.draw(screen)	
 
 	pygame.display.update()
-
-	# pygame.display.flip()
 
 pygame.quit()
