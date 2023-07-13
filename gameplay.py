@@ -128,6 +128,7 @@ def handle_clicks(self, *args, **kwargs):
 				print(clicked_pos_x, clicked_pos_y)
 				squares = update_squares_from_json()
 				clicked_square = find_clicked_square(clicked_pos_x, clicked_pos_y, squares)
+			
 				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
 				if first_clicked_square is None and clicked_square.piece_occupying != "":			
 					first_clicked_square = clicked_square
@@ -150,7 +151,9 @@ def handle_clicks(self, *args, **kwargs):
 
 					selected_sprite = find_selected_sprite_from_clicked_square(group, first_clicked_square )
 					if selected_sprite:
-						on_click(selected_sprite, clicked_pos_x, clicked_pos_y)
+						clicked_square_centre_x = np.mean([clicked_square.top_left_x, clicked_square.bottom_right_x])
+						clicked_square_centre_y = np.mean([clicked_square.top_left_y, clicked_square.bottom_right_y])
+						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
 						first_clicked_square = None
 						selected_sprite = None
@@ -158,8 +161,8 @@ def handle_clicks(self, *args, **kwargs):
 
 
 
-def on_click(selected_sprite, clicked_pos_x, clicked_pos_y):
-	selected_sprite.movement(clicked_pos_x, clicked_pos_y)
+def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x, clicked_square_centre_y):
+	selected_sprite.movement(clicked_square_centre_x - 30, clicked_square_centre_y - 30)
 	
 pygame.init()
 screen = pygame.display.set_mode((570, 570))
