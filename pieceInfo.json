@@ -1,0 +1,165 @@
+{
+    "pieces":
+    [
+    {
+        "name": "a1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "a2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "a7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "a8",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "b1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "b2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "b7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "b8",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "c1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "c2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "c7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "c8",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "d1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "d2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "d7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "d8",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "e1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "e2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "e7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "e8",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "f1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "f2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "f7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "f8",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "g1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "g2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "g7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "g8",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "h1",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "h2",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "h7",
+        "colour": "black",
+        "move_counter": 0
+    },
+    {
+        "name": "h8",
+        "colour": "black",
+        "move_counter": 0
+    }
+]
+}
