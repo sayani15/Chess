@@ -114,15 +114,20 @@ def handle_clicks(self, *args, **kwargs):
 					print("Piece in square. Cannot move.")
 					print("second click")
 				# if on second click and clicked square is unoccupied, 
-				elif first_clicked_square is not None and clicked_square.piece_occupying == "":
+				elif first_clicked_square is not None and clicked_square.piece_occupying == "":					
 					# move piece logic
 					_ = 1
 					print("second click")
 
 					selected_sprite = find_selected_sprite_from_clicked_square(group, first_clicked_square )
 					if selected_sprite:
+						vm = helpers.get_valid_moves(selected_sprite)
 						clicked_square_centre_x = np.mean([clicked_square.top_left_x, clicked_square.bottom_right_x])
 						clicked_square_centre_y = np.mean([clicked_square.top_left_y, clicked_square.bottom_right_y])
+				
+						cs = helpers.find_clicked_square((clicked_square_centre_x, clicked_square_centre_y), squares)
+						if cs not in vm:
+							return
 						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
 						selected_sprite.move_counter += 1
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
