@@ -8,6 +8,39 @@ import pygame
 import numpy as np
 from enum import Enum
 
+def get_valid_moves(selected_sprite: pygame.sprite): 
+    """Finds the rank of the player's selected sprite and returns the valid moves for it in its current position.
+
+    Args:
+        selected_sprite (pygame.sprite): The sprite that has been selected by the player.
+
+    Raises:
+        Exception: Raises exception if selected_sprite's rank does not match a valid rank.
+
+    Returns:
+        valid_moves (list) : List of available moves for the sprite piece.
+    """
+    pieces_in_play = get_pieces_in_play_from_json()
+    clicked_square_name = find_clicked_square((selected_sprite.rect.centerx, selected_sprite.rect.centery), get_squares())
+    piece = Piece.Piece(selected_sprite.colour, clicked_square_name[0], int(clicked_square_name[1]), selected_sprite.rank, selected_sprite.move_counter)
+
+    if selected_sprite.rank == Rank.Rank.pawn.value:
+        valid_moves = main.pawn_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.knight.value:
+        valid_moves = main.knight_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.bishop.value:
+        valid_moves = main.bishop_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.rook.value:
+        valid_moves = main.rook_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.queen.value:
+        valid_moves = main.queen_movement(pieces_in_play, piece)
+    elif selected_sprite.rank == Rank.Rank.king.value:
+        valid_moves = main.king_movement(pieces_in_play, piece)  
+    else:
+        raise Exception     
+    
+    return valid_moves
+
 def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ): 
     """Finds the name of the square when given coordinates of position.
 
@@ -24,16 +57,50 @@ def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
          coordinates[1] > square.top_left_y and coordinates[1] < square.bottom_right_y:
             return square.name
 
+def get_rank_from_string_piece_occupying(piece_occupying):
+    if piece_occupying == "pawn":
+        rank = Rank.Rank(1)
+    if piece_occupying == "knight":
+        rank = Rank.Rank(2)
+    if piece_occupying == "bishop":
+        rank = Rank.Rank(3)
+    if piece_occupying == "rook":
+        rank = Rank.Rank(4)
+    if piece_occupying == "queen":
+        rank = Rank.Rank(5)
+    if piece_occupying == "king":
+        rank = Rank.Rank(6)
+
+    return rank
+    
+
 def get_squares():
-    f = open('squareInfo.json')
-    data_dictionary = json.load(f)
-    f.close()
+    with open('squareInfo.json', 'r') as file:
+        data_dictionary = json.load(file)
+
     squares = []
 
     for square in data_dictionary["squares"]:
-            squares.append(dictionary_to_object(square))
+        squares.append(dictionary_to_square_object(square))
 
     return squares
+
+def get_pieces_in_play_from_json():
+    pieces = []
+
+    with open('squareInfo.json', 'r') as file:
+        square_data_dict = json.load(file)
+
+    with open('pieceInfo.json', 'r') as file:
+        piece_data_dict = json.load(file)
+
+    for square in square_data_dict["squares"]:
+        for piece in piece_data_dict["pieces"]:
+            if square["name"] == piece["name"]:
+                pieces.append(dictionary_to_piece_object(piece, square))
+
+    return pieces
+    
 
 def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, square_name: str):
     """Updates "piece_occupying" part of squareInfo.json
@@ -71,7 +138,36 @@ def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, squa
         print("Error: Unable to parse JSON data from file.")
         print("Details:", e)
 
-def dictionary_to_object(data_dict: dict):  
+def update_pieceInfojson(previous_piece_name: str, square_name: str):
+    """Updates "piece_occupying" part of squareInfo.json
+
+    Args:
+        previous_square_name (str): The name of the square the piece was on in the previous move
+        moved_piece_rank (str): Rank of the piece that's been moved
+        square_name (str): The name of the square that the piece has been moved to.
+    """
+    
+    try:
+        with open('pieceInfo.json', 'r') as f:
+            data = json.load(f)
+
+        # Change name of square piece is in
+        for d in data["pieces"]:
+            if previous_piece_name == d["name"]:
+                d["name"] = str(square_name)
+                break        
+        
+
+        with open('pieceInfo.json', 'w') as f:
+            json.dump(data, f, indent = 4)
+
+
+    except Exception as e:
+        print("Error: Unable to parse JSON data from file.")
+        print("Details:", e)
+
+
+def dictionary_to_square_object(data_dict: dict):  
     """Turns dictionaries into objects
 
     Args:
@@ -84,41 +180,24 @@ def dictionary_to_object(data_dict: dict):
 
     return square 
 
-
-def get_valid_moves(selected_sprite: pygame.sprite): 
-    """Finds the rank of the player's selected sprite and returns the valid moves for it in its current position.
+def dictionary_to_piece_object(piece_data_dict: dict, square_data_dict: dict):  
+    """Turns dictionaries into objects
 
     Args:
-        selected_sprite (pygame.sprite): The sprite that has been selected by the player.
-
-    Raises:
-        Exception: Raises exception if selected_sprite's rank does not match a valid rank.
+        data_dict (dict): A dictionary containing the properties of a square as keys and values (e.g. 'name': 'a6' ).
 
     Returns:
-        valid_moves (list) : List of available moves for the sprite piece.
+        square (Square): Info about a particular square on the board
     """
-    pieces_in_play = main.create_pieces()
-    clicked_square_name = find_clicked_square((selected_sprite.rect.centerx, selected_sprite.rect.centery), get_squares())
-    piece = Piece.Piece(selected_sprite.colour, clicked_square_name[0], int(clicked_square_name[1]), selected_sprite.rank, selected_sprite.move_counter)
-
-    if selected_sprite.rank == Rank.Rank.pawn.value:
-        valid_moves = main.pawn_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.knight.value:
-        valid_moves = main.knight_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.bishop.value:
-        valid_moves = main.bishop_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.rook.value:
-        valid_moves = main.rook_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.queen.value:
-        valid_moves = main.queen_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.king.value:
-        valid_moves = main.king_movement(pieces_in_play, piece)  
-    else:
-        raise Exception     
+    rank = square_data_dict["piece_occupying"]
     
-    return valid_moves
+    piece = Piece.Piece(piece_data_dict["colour"], piece_data_dict["name"][0], int(piece_data_dict["name"][1]), 
+                        rank, piece_data_dict["move_counter"])
 
-def update_squares_from_json() ->list[Square.Square]: 
+    return piece 
+
+
+def update_squares_from_json() ->list[Piece.Piece]: 
     """Adds info about each square from the json file to square
 
     Returns:
@@ -126,12 +205,12 @@ def update_squares_from_json() ->list[Square.Square]:
     """
     squares = []
 
-    f = open('squareInfo.json')
-    data_dictionary = json.load(f)
-    f.close()
+    with open('squareInfo.json', 'r') as file:
+        data_dictionary = json.load(file)
 
     for square in data_dictionary["squares"]:
-        squares.append(dictionary_to_object(square))    
+        squares.append(dictionary_to_square_object(square))    
 
     return squares
+# is this method needed? its the same as get_squares()
 

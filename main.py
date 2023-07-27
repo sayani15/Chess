@@ -4,7 +4,6 @@ import rank as Rank
 from typing import List
 
 
-
 def create_grid():
     """
     Uses an array to create the positions of all 64 squares of the chessboard
@@ -289,100 +288,100 @@ def knight_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     valid_moves = []
     
     # +2 y_pos, +1 x_pos
-    if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position + 2) and \
-                is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position + 2}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position + 2) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, 1), piece.y_position + 2, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position + 2}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position + 2) and \
+            is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position + 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position + 2}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position + 2) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, 1), piece.y_position + 2, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position + 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position + 2}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # +2 y_pos, -1 x_pos
-    if examine_x_positions(piece.x_position, -1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position + 2) and \
-                is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position + 2}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position + 2) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, -1), piece.y_position + 2, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position + 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position + 2}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, -1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position + 2) and \
+            is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position + 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position + 2}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position + 2) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, -1), piece.y_position + 2, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position + 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position + 2}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # -2 y_pos, +1 x_pos
-    if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position - 2) and \
-                is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position - 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position - 2}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position - 2) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, 1), piece.y_position - 2, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position - 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position - 2}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position - 2) and \
+            is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position - 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position - 2}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position - 2) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, 1), piece.y_position - 2, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, 1), piece.y_position - 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 1)}{piece.y_position - 2}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # -2 y_pos, -1 x_pos
-    if examine_x_positions(piece.x_position, -1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position - 2) and \
-                is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position - 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position - 2}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position - 2) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, -1), piece.y_position - 2, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position - 2):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position - 2}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, -1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position - 2) and \
+            is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position - 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position - 2}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, -1), piece.y_position - 2) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, -1), piece.y_position - 2, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, -1), piece.y_position - 2):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -1)}{piece.y_position - 2}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # +1 y_pos, +2 x_pos
-    if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position + 1) and \
-                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position + 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position + 1}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position + 1) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, 2), piece.y_position + 1, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position + 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position + 1}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position + 1) and \
+            is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position + 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position + 1}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position + 1) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, 2), piece.y_position + 1, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position + 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position + 1}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # +1 y_pos, -2 x_pos
-    if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position + 1) and \
-                is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position + 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position + 1}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position + 1) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, -2), piece.y_position + 1, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position + 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position + 1}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position + 1) and \
+            is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position + 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position + 1}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position + 1) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, -2), piece.y_position + 1, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position + 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position + 1}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # -1 y_pos, +2 x_pos
-    if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position - 1) and \
-                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position - 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position - 1}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position - 1) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, 2), piece.y_position - 1, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position - 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position - 1}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position - 1) and \
+            is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position - 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position - 1}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, 2), piece.y_position - 1) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, 2), piece.y_position - 1, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, 2), piece.y_position - 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, 2)}{piece.y_position - 1}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # -1 y_pos, -2 x_pos
-    if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
-        if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position - 1) and \
-                is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position - 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position - 1}")
-        if is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position - 1) and \
-                get_piece_in_the_square(examine_x_positions(piece.x_position, -2), piece.y_position - 1, pieces).colour != piece.colour.lower() and \
-                is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position - 1):
-            valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position - 1}")
-        else:
-            _ = 1  # something needs to happen here that isn't adding to valid_moves
+    # if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
+    if not is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position - 1) and \
+            is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position - 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position - 1}")
+    if is_square_occupied(pieces, examine_x_positions(piece.x_position, -2), piece.y_position - 1) and \
+            get_piece_in_the_square(examine_x_positions(piece.x_position, -2), piece.y_position - 1, pieces).colour != piece.colour.lower() and \
+            is_square_valid(examine_x_positions(piece.x_position, -2), piece.y_position - 1):
+        valid_moves.append(f"{examine_x_positions(piece.x_position, -2)}{piece.y_position - 1}")
+    else:
+        _ = 1  # something needs to happen here that isn't adding to valid_moves
 
     # removes invalid moves from the list valid_moves.
     invalid_moves = []

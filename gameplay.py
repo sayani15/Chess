@@ -36,50 +36,6 @@ class ClickableSprite(pygame.sprite.Sprite):
 
 		return
 	
-def update_squares_from_json() ->list[Square.Square]: 
-    """Adds info about each square from the json file to square
-
-    Returns:
-        squares (list): List of square
-    """
-    squares = []
-
-    with open('squareInfo.json', 'r') as file:
-        data_dictionary = json.load(file)
-
-    # f = open('squareInfo.json')
-    # data_dictionary = json.load(f)
-    # f.close()
-
-    for square in data_dictionary["squares"]:
-        squares.append(helpers.dictionary_to_object(square))    
-
-    return squares
-
-def highlight_squares(valid_moves: List[str]): 
-    """Draws rectangles to highlight the squares that are part of the valid_moves for selected_piece.
-
-    Args:
-        squares (List[Square.Square]): A list of all squares
-    """
-    squares_to_highlight = []
-    squares = update_squares_from_json()
-
-
-    for valid_move in valid_moves:
-        for square in squares:
-            if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
-                squares_to_highlight.append(square)
-
-    for square in squares_to_highlight:
-        width = np.abs(square.bottom_right_x - square.top_left_x)
-        height = np.abs(square.bottom_right_y - square.top_left_y)
-
-        pygame.draw.rect(screen, (54, 152, 200, 0), (pygame.Rect(square.top_left_x, square.top_left_y, width, height)))
-       
-    pygame.display.flip()
-
-    return
 
 def find_selected_sprite_from_clicked_square(group: pygame.sprite.RenderPlain, clicked_square: Square.Square):
 	"""Finds the selected_sprite using the clicked_square.
@@ -115,6 +71,20 @@ def find_clicked_square(clicked_pos_x: int, clicked_pos_y: int, squares: List[Sq
         	clicked_pos_y > square.top_left_y and clicked_pos_y < square.bottom_right_y:
             return square
 
+def highlight_valid_moves(valid_moves):
+	
+	squares_to_highlight = []
+	squares = helpers.update_squares_from_json()
+
+	if valid_moves is not None:
+		for valid_move in valid_moves:
+			for square in squares:
+				if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
+					squares_to_highlight.append(square)
+
+		for square in squares_to_highlight:
+			pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) # always does this and the stuff below
+
 def handle_clicks(self, *args, **kwargs):
 	if len(events) > 0:
 		if events[0].type == pygame.MOUSEBUTTONUP:
@@ -126,7 +96,7 @@ def handle_clicks(self, *args, **kwargs):
 				global first_clicked_square
 				clicked_pos_x, clicked_pos_y = events[0].pos[0], events[0].pos[1]
 				print(clicked_pos_x, clicked_pos_y)
-				squares = update_squares_from_json()
+				squares = helpers.update_squares_from_json()
 				clicked_square = find_clicked_square(clicked_pos_x, clicked_pos_y, squares)
 			
 				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
@@ -154,14 +124,21 @@ def handle_clicks(self, *args, **kwargs):
 						clicked_square_centre_x = np.mean([clicked_square.top_left_x, clicked_square.bottom_right_x])
 						clicked_square_centre_y = np.mean([clicked_square.top_left_y, clicked_square.bottom_right_y])
 						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
+						selected_sprite.move_counter += 1
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
+						helpers.update_pieceInfojson(first_clicked_square.name, clicked_square.name)
 						first_clicked_square = None
 						selected_sprite = None
 						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
 
+def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x: int, clicked_square_centre_y: int):
+	"""Calls movement()
 
-
-def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x, clicked_square_centre_y):
+	Args:
+		selected_sprite (pygame.sprite): The sprite that has been selected by the player to be moved.
+		clicked_square_centre_x (int): The x coordinate of the centre of the square that the user has clicked on to move selected_sprite to.
+		clicked_square_centre_y (int): The y coordinate of the centre of the square that the user has clicked on to move selected_sprite to.
+	"""
 	selected_sprite.movement(clicked_square_centre_x - 30, clicked_square_centre_y - 30)
 	
 pygame.init()
@@ -260,19 +237,26 @@ while running:
 		if event.type == pygame.QUIT:
 			running = False
 
-	vm = handle_clicks(events)
+	# vm = handle_clicks(events)
 	
-	squares_to_highlight = []
-	squares = update_squares_from_json()
+	# squares_to_highlight = []
+	# squares = update_squares_from_json()
 
-	if vm is not None:
-		for valid_move in vm:
-			for square in squares:
-				if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
-					squares_to_highlight.append(square)
+	# if vm is not None:
+	# 	for valid_move in vm:
+	# 		for square in squares:
+	# 			if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
+	# 				squares_to_highlight.append(square)
 
-		for square in squares_to_highlight:
-			pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) # always does this and the stuff below
+	# 	for square in squares_to_highlight:
+	# 		pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) # always does this and the stuff below
+
+	valid_moves = handle_clicks(events)
+	
+	if valid_moves:
+		print(valid_moves)
+
+	highlight_valid_moves(valid_moves)
 
 	group.draw(screen)	
 

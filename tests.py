@@ -2,7 +2,7 @@ import unittest
 import piece as Piece
 import rank as Rank
 import main
-import ui
+#import ui
 
 
 
@@ -212,6 +212,15 @@ class GetPawnMovementTestCases(unittest.TestCase):
 
         self.assertEqual([], result)
 
+    def test_not_first_move(self):  
+        piece = Piece.Piece("white", "d", 2, Rank.Rank(1), 628)
+        pieces = []
+
+        result = main.pawn_movement(pieces, piece)
+        expected_result = ["d3"]
+
+        self.assertEqual(expected_result, result)
+
 
 class GetBishopMovementTestCases(unittest.TestCase):
     def test_move_in_empty_board(self):
@@ -296,6 +305,14 @@ class GetKnightMovementTestCases(unittest.TestCase):
         result = main.knight_movement(pieces, piece)
 
         self.assertEqual(sorted(["f5", "b5", "f3", "b3", "e2", "c2", "e6", "c6" ]), sorted(result))
+
+    def test_incorrect_valid_moves_from_h5(self):
+        piece = Piece.Piece("white", "h", 5, Rank.Rank(2), 0)
+
+        pieces = []
+        result = main.knight_movement([], piece)
+
+        self.assertEqual(sorted(["g3", "g7", "f4", "f6"]), sorted(result))
 
 
 class GetRookMovementTestCases(unittest.TestCase):
