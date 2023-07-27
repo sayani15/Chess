@@ -97,6 +97,7 @@ def handle_clicks(self, *args, **kwargs):
 				clicked_pos_x, clicked_pos_y = events[0].pos[0], events[0].pos[1]
 				print(clicked_pos_x, clicked_pos_y)
 				squares = helpers.update_squares_from_json()
+				pieces_in_play = helpers.get_pieces_in_play_from_json()
 				clicked_square = find_clicked_square(clicked_pos_x, clicked_pos_y, squares)
 			
 				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
@@ -111,6 +112,11 @@ def handle_clicks(self, *args, **kwargs):
 				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
 					# square to move to is occupied logic
 					# TODO Implement taking pieces
+					clicked_piece = main.get_piece_in_the_square(clicked_square.name[0], clicked_square.name[1], pieces_in_play)
+					selected_sprite = find_selected_sprite_from_clicked_square(group, first_clicked_square)
+
+					if clicked_piece.colour != selected_sprite.colour:
+						print("c afsd")
 					print("Piece in square. Cannot move.")
 					print("second click")
 				# if on second click and clicked square is unoccupied, 
