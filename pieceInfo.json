@@ -23,12 +23,12 @@
     },
     {
         "name": "b1",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
         "name": "b2",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
@@ -43,12 +43,12 @@
     },
     {
         "name": "c1",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
         "name": "c2",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
@@ -63,12 +63,12 @@
     },
     {
         "name": "d1",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
         "name": "d2",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
@@ -83,12 +83,12 @@
     },
     {
         "name": "e1",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
         "name": "e2",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
@@ -103,12 +103,12 @@
     },
     {
         "name": "f1",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
         "name": "f2",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
@@ -123,12 +123,12 @@
     },
     {
         "name": "g1",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
         "name": "g2",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
@@ -143,12 +143,12 @@
     },
     {
         "name": "h1",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
         "name": "h2",
-        "colour": "black",
+        "colour": "white",
         "move_counter": 0
     },
     {
