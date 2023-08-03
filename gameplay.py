@@ -83,7 +83,7 @@ def highlight_valid_moves(valid_moves):
 					squares_to_highlight.append(square)
 
 		for square in squares_to_highlight:
-			pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) # always does this and the stuff below
+			pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) 
 
 def handle_clicks(self, *args, **kwargs):
 	if len(events) > 0:
@@ -106,8 +106,8 @@ def handle_clicks(self, *args, **kwargs):
 					# find and highlight required squares
 					print("first click")
 					selected_sprite = find_selected_sprite_from_clicked_square(group, clicked_square)
-					valid_moves = helpers.get_valid_moves(selected_sprite)
-					return valid_moves
+					valid_moves_to_highlight = helpers.get_valid_moves(selected_sprite)
+					return valid_moves_to_highlight
 				# test for whether we're on the second click, and whether there's a piece in the square being moved to
 				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
 					# square to move to is occupied logic
@@ -117,6 +117,21 @@ def handle_clicks(self, *args, **kwargs):
 
 					if clicked_piece.colour != selected_sprite.colour:
 						print("c afsd")
+						clicked_square_centre_x = np.mean([clicked_square.top_left_x, clicked_square.bottom_right_x])
+						clicked_square_centre_y = np.mean([clicked_square.top_left_y, clicked_square.bottom_right_y])
+						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
+						helpers.update_pieceInfojson(first_clicked_square.name, clicked_square.name, True)
+						sprite_to_be_removed = find_selected_sprite_from_clicked_square(group, clicked_square)
+						group.remove(sprite_to_be_removed)
+						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
+
+						first_clicked_square = None
+						selected_sprite = None
+						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
+
+						pygame.display.update()
+					
+					
 					print("Piece in square. Cannot move.")
 					print("second click")
 				# if on second click and clicked square is unoccupied, 
@@ -127,12 +142,12 @@ def handle_clicks(self, *args, **kwargs):
 
 					selected_sprite = find_selected_sprite_from_clicked_square(group, first_clicked_square )
 					if selected_sprite:
-						vm = helpers.get_valid_moves(selected_sprite)
+						valid_squares_to_move_to = helpers.get_valid_moves(selected_sprite) # list of str, not Square
 						clicked_square_centre_x = np.mean([clicked_square.top_left_x, clicked_square.bottom_right_x])
 						clicked_square_centre_y = np.mean([clicked_square.top_left_y, clicked_square.bottom_right_y])
-				
-						cs = helpers.find_clicked_square((clicked_square_centre_x, clicked_square_centre_y), squares)
-						if cs not in vm:
+
+						clicked_square_name = helpers.find_clicked_square((clicked_square_centre_x, clicked_square_centre_y), squares)
+						if clicked_square_name not in valid_squares_to_move_to:
 							return
 						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
 						selected_sprite.move_counter += 1
@@ -242,25 +257,13 @@ screen.blit(pygame.image.load("chessboard.png"), [0, 0])
 
 
 running = True
+helpers.revert_json_changes()
+
 while running:  
 	events = pygame.event.get()
 	for event in events:
 		if event.type == pygame.QUIT:
 			running = False
-
-	# vm = handle_clicks(events)
-	
-	# squares_to_highlight = []
-	# squares = update_squares_from_json()
-
-	# if vm is not None:
-	# 	for valid_move in vm:
-	# 		for square in squares:
-	# 			if square.name[0] == valid_move[0] and square.name[1] == valid_move[1]:
-	# 				squares_to_highlight.append(square)
-
-	# 	for square in squares_to_highlight:
-	# 		pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) # always does this and the stuff below
 
 	valid_moves = handle_clicks(events)
 	

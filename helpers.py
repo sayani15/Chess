@@ -8,7 +8,7 @@ import pygame
 import numpy as np
 from enum import Enum
 
-def get_valid_moves(selected_sprite: pygame.sprite): 
+def get_valid_moves(selected_sprite: pygame.sprite) -> list[str]: 
     """Finds the rank of the player's selected sprite and returns the valid moves for it in its current position.
 
     Args:
@@ -41,7 +41,7 @@ def get_valid_moves(selected_sprite: pygame.sprite):
     
     return valid_moves
 
-def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ): 
+def find_clicked_square(coordinates: tuple, squares: List[Square.Square]) -> str: 
     """Finds the name of the square when given coordinates of position.
 
     Args:
@@ -57,7 +57,15 @@ def find_clicked_square(coordinates: tuple, squares: List[Square.Square] ):
          coordinates[1] > square.top_left_y and coordinates[1] < square.bottom_right_y:
             return square.name
 
-def get_rank_from_string_piece_occupying(piece_occupying):
+def get_rank_from_string_piece_occupying(piece_occupying) -> Rank:
+    """Converts the name of the piece as a string, e.g. "knight" to a Rank.Rank()
+
+    Args:
+        piece_occupying (str): The type of piece. E.g "rook"
+
+    Returns:
+        rank (Rank): The rank of the piece. E.g. name: 'rook', value: 4
+    """
     if piece_occupying == "pawn":
         rank = Rank.Rank(1)
     if piece_occupying == "knight":
@@ -74,7 +82,12 @@ def get_rank_from_string_piece_occupying(piece_occupying):
     return rank
     
 
-def get_squares():
+def get_squares() -> list[Square.Square]:
+    """Gets a list of square objects from squareInfo.json
+
+    Returns:
+        list[Square.Square]: A list of squares
+    """
     with open('squareInfo.json', 'r') as file:
         data_dictionary = json.load(file)
 
@@ -85,7 +98,12 @@ def get_squares():
 
     return squares
 
-def get_pieces_in_play_from_json():
+def get_pieces_in_play_from_json() -> list[Piece.Piece]:
+    """Gets a list of piece objects from pieceInfo.json and squareInfo.json
+
+    Returns:
+        list[Piece.Piece]: A list of pieces
+    """
     pieces = []
 
     with open('squareInfo.json', 'r') as file:
@@ -138,12 +156,11 @@ def update_squareInfojson(previous_square_name: str, moved_piece_rank: str, squa
         print("Error: Unable to parse JSON data from file.")
         print("Details:", e)
 
-def update_pieceInfojson(previous_piece_name: str, square_name: str):
-    """Updates "piece_occupying" part of squareInfo.json
+def update_pieceInfojson(previous_square_name: str, square_name: str, is_take_piece_action: bool = False):
+    """Updates "name" part of pieceInfo.json
 
     Args:
-        previous_square_name (str): The name of the square the piece was on in the previous move
-        moved_piece_rank (str): Rank of the piece that's been moved
+        previous_piece_name (str): The name of the square the piece was on in the previous move
         square_name (str): The name of the square that the piece has been moved to.
     """
     
@@ -153,10 +170,19 @@ def update_pieceInfojson(previous_piece_name: str, square_name: str):
 
         # Change name of square piece is in
         for d in data["pieces"]:
-            if previous_piece_name == d["name"]:
+            if previous_square_name == d["name"]:
                 d["name"] = str(square_name)
                 break        
         
+        # Remove piece from previous square
+        if is_take_piece_action:
+            for d in data["pieces"]:
+                if square_name == d["name"]:
+                    d["name"] = ""
+                    d["colour"] = ""
+                    d["move_counter"] = 0
+                    break        
+            
 
         with open('pieceInfo.json', 'w') as f:
             json.dump(data, f, indent = 4)
@@ -167,7 +193,7 @@ def update_pieceInfojson(previous_piece_name: str, square_name: str):
         print("Details:", e)
 
 
-def dictionary_to_square_object(data_dict: dict):  
+def dictionary_to_square_object(data_dict: dict) -> Square.Square:  
     """Turns dictionaries into objects
 
     Args:
@@ -180,14 +206,16 @@ def dictionary_to_square_object(data_dict: dict):
 
     return square 
 
-def dictionary_to_piece_object(piece_data_dict: dict, square_data_dict: dict):  
-    """Turns dictionaries into objects
+def dictionary_to_piece_object(piece_data_dict: dict, square_data_dict: dict) -> Piece.Piece:  
+    """Turns dictionaries into objects.
 
     Args:
-        data_dict (dict): A dictionary containing the properties of a square as keys and values (e.g. 'name': 'a6' ).
+        piece_data_dict (dict): A dictionary containing info about the properties of a piece using the data in 
+                                pieceInfo.json) as keys and values (e.g. 'name': 'a6', or 'colour': 'black').
+        square_data_dict (dict): A dictionary containing the properties of a square as keys and values (e.g. 'name': 'a6' ).
 
     Returns:
-        square (Square): Info about a particular square on the board
+        piece (Piece): Info about a particular piece on the board
     """
     rank = square_data_dict["piece_occupying"]
     
@@ -197,7 +225,7 @@ def dictionary_to_piece_object(piece_data_dict: dict, square_data_dict: dict):
     return piece 
 
 
-def update_squares_from_json() ->list[Piece.Piece]: 
+def update_squares_from_json() -> list[Square.Square]: 
     """Adds info about each square from the json file to square
 
     Returns:
@@ -213,4 +241,34 @@ def update_squares_from_json() ->list[Piece.Piece]:
 
     return squares
 # is this method needed? its the same as get_squares()
+
+def revert_json_changes():
+    """Uses piece and square InfoInitial json files to send all pieces and squares back to their original states in piece/squareInfo
+       when the program is closed.
+    """
+    try:
+        with open('pieceInfoInitial.json', 'r') as f:
+            data = json.load(f)
+
+        with open('pieceInfo.json', 'w') as f:
+            json.dump(data, f, indent = 4)
+
+    except Exception as e:
+        print("Error: Unable to parse JSON data from file.")
+        print("Details:", e)
+
+
+    try:
+        with open('squareInfoInitial.json', 'r') as f:
+            data = json.load(f)
+
+        with open('squareInfo.json', 'w') as f:
+            json.dump(data, f, indent = 4)
+
+    except Exception as e:
+        print("Error: Unable to parse JSON data from file.")
+        print("Details:", e)
+
+    return
+    
 
