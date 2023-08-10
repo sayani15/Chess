@@ -85,6 +85,11 @@ def highlight_valid_moves(valid_moves):
 		for square in squares_to_highlight:
 			pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) 
 
+def toggle_player_colour(current_player_colour: str):
+	if current_player_colour == "white":
+		return "black"
+	return "white"
+
 def handle_clicks(self, *args, **kwargs):
 	if len(events) > 0:
 		if events[0].type == pygame.MOUSEBUTTONUP:
@@ -94,14 +99,16 @@ def handle_clicks(self, *args, **kwargs):
 				print(e)
 			finally:
 				global first_clicked_square
+				global current_player_colour
 				clicked_pos_x, clicked_pos_y = events[0].pos[0], events[0].pos[1]
 				print(clicked_pos_x, clicked_pos_y)
 				squares = helpers.update_squares_from_json()
 				pieces_in_play = helpers.get_pieces_in_play_from_json()
 				clicked_square = find_clicked_square(clicked_pos_x, clicked_pos_y, squares)
+				clicked_piece = main.get_piece_in_the_square(clicked_square.name[0], clicked_square.name[1], pieces_in_play)
 			
 				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
-				if first_clicked_square is None and clicked_square.piece_occupying != "":			
+				if first_clicked_square is None and clicked_square.piece_occupying != "" and current_player_colour == clicked_piece.colour:			
 					first_clicked_square = clicked_square
 					# find and highlight required squares
 					print("first click")
@@ -111,12 +118,11 @@ def handle_clicks(self, *args, **kwargs):
 				# test for whether we're on the second click, and whether there's a piece in the square being moved to
 				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
 					# square to move to is occupied logic
-					# TODO Implement taking pieces
 					clicked_piece = main.get_piece_in_the_square(clicked_square.name[0], clicked_square.name[1], pieces_in_play)
 					selected_sprite = find_selected_sprite_from_clicked_square(group, first_clicked_square)
 
+					# taking pieces logic
 					if clicked_piece.colour != selected_sprite.colour:
-						print("c afsd")
 						clicked_square_centre_x = np.mean([clicked_square.top_left_x, clicked_square.bottom_right_x])
 						clicked_square_centre_y = np.mean([clicked_square.top_left_y, clicked_square.bottom_right_y])
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
@@ -127,6 +133,7 @@ def handle_clicks(self, *args, **kwargs):
 
 						first_clicked_square = None
 						selected_sprite = None
+						current_player_colour = toggle_player_colour(current_player_colour)
 						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
 
 						pygame.display.update()
@@ -155,6 +162,8 @@ def handle_clicks(self, *args, **kwargs):
 						helpers.update_pieceInfojson(first_clicked_square.name, clicked_square.name)
 						first_clicked_square = None
 						selected_sprite = None
+						current_player_colour = toggle_player_colour(current_player_colour)
+
 						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
 
 def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x: int, clicked_square_centre_y: int):
@@ -254,7 +263,7 @@ def load_graphics():
 
 group = load_graphics()
 screen.blit(pygame.image.load("chessboard.png"), [0, 0])
-
+current_player_colour = "white"
 
 running = True
 helpers.revert_json_changes()
