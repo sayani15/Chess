@@ -169,10 +169,11 @@ def update_pieceInfojson(previous_square_name: str, square_name: str, is_take_pi
             data = json.load(f)
 
         # Change name of square piece is in
-        for d in data["pieces"]:
-            if previous_square_name == d["name"]:
-                d["name"] = str(square_name)
-                break        
+        if is_take_piece_action == False:
+            for d in data["pieces"]:
+                if previous_square_name == d["name"]:
+                    d["name"] = str(square_name)
+                    break        
         
         # Remove piece from previous square
         if is_take_piece_action:
@@ -181,7 +182,9 @@ def update_pieceInfojson(previous_square_name: str, square_name: str, is_take_pi
                     d["name"] = ""
                     d["colour"] = ""
                     d["move_counter"] = 0
-                    break        
+                if previous_square_name == d["name"]:
+                    d["name"] = str(square_name)
+                      
             
 
         with open('pieceInfo.json', 'w') as f:
