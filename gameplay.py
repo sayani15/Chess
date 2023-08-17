@@ -1,4 +1,5 @@
 import pygame
+from clickable_sprite import ClickableSprite
 import rank as Rank
 import helpers
 import square as Square
@@ -12,30 +13,6 @@ import PieceSprite as ps
 
 click_counter = 0
 selected_sprite = None
-
-class ClickableSprite(pygame.sprite.Sprite):
-	def __init__(self, image_file_path: str, x: int, y: int, callback, colour: str, rank: Rank, move_counter: int):
-		super().__init__()
-		#self.image = image
-		self.image = pygame.image.load(image_file_path)
-		self.rect = self.image.get_rect()
-		self.rect.x = x
-		self.rect.y = y
-		self.callback = callback
-		self.colour = colour
-		self.move_counter = 0
-		self.rank = rank
-		self.visible = True
-		
-
-	
-
-	def movement(self, x: int, y: int):
-		self.rect.x = x
-		self.rect.y = y
-
-		return
-	
 
 def find_selected_sprite_from_clicked_square(group: pygame.sprite.RenderPlain, clicked_square: Square.Square):
 	"""Finds the selected_sprite using the clicked_square.
@@ -90,6 +67,7 @@ def toggle_player_colour(current_player_colour: str):
 		return "black"
 	return "white"
 
+
 def handle_clicks(self, *args, **kwargs):
 	if len(events) > 0:
 		if events[0].type == pygame.MOUSEBUTTONUP:
@@ -131,6 +109,8 @@ def handle_clicks(self, *args, **kwargs):
 						group.remove(sprite_to_be_removed)
 						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
 
+
+						helpers.is_in_check("e1", "white", group)
 						first_clicked_square = None
 						selected_sprite = None
 						current_player_colour = toggle_player_colour(current_player_colour)
@@ -160,6 +140,8 @@ def handle_clicks(self, *args, **kwargs):
 						selected_sprite.move_counter += 1
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
 						helpers.update_pieceInfojson(first_clicked_square.name, clicked_square.name)
+						helpers.is_in_check("e1", "white", group)
+
 						first_clicked_square = None
 						selected_sprite = None
 						current_player_colour = toggle_player_colour(current_player_colour)

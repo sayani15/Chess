@@ -7,8 +7,9 @@ from typing import List
 import pygame
 import numpy as np
 from enum import Enum
+import clickable_sprite as ClickableSprite
 
-def get_valid_moves(selected_sprite: pygame.sprite) -> list[str]: 
+def get_valid_moves(selected_sprite: ClickableSprite.ClickableSprite) -> list[str]: 
     """Finds the rank of the player's selected sprite and returns the valid moves for it in its current position.
 
     Args:
@@ -20,24 +21,39 @@ def get_valid_moves(selected_sprite: pygame.sprite) -> list[str]:
     Returns:
         valid_moves (list) : List of available moves for the sprite piece.
     """
+    movement_functions = {
+        Rank.Rank.pawn.value: main.pawn_movement,
+        Rank.Rank.knight.value: main.knight_movement,
+        Rank.Rank.bishop.value: main.bishop_movement,
+        Rank.Rank.rook.value: main.rook_movement,
+        Rank.Rank.queen.value: main.queen_movement,
+        Rank.Rank.king.value: main.king_movement,
+    }
+
+    if selected_sprite.rank not in movement_functions:
+        raise Exception
+
     pieces_in_play = get_pieces_in_play_from_json()
     clicked_square_name = find_clicked_square((selected_sprite.rect.centerx, selected_sprite.rect.centery), get_squares())
     piece = Piece.Piece(selected_sprite.colour, clicked_square_name[0], int(clicked_square_name[1]), selected_sprite.rank, selected_sprite.move_counter)
 
-    if selected_sprite.rank == Rank.Rank.pawn.value:
-        valid_moves = main.pawn_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.knight.value:
-        valid_moves = main.knight_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.bishop.value:
-        valid_moves = main.bishop_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.rook.value:
-        valid_moves = main.rook_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.queen.value:
-        valid_moves = main.queen_movement(pieces_in_play, piece)
-    elif selected_sprite.rank == Rank.Rank.king.value:
-        valid_moves = main.king_movement(pieces_in_play, piece)  
-    else:
-        raise Exception     
+    valid_moves = movement_functions[selected_sprite.rank](pieces_in_play, piece)
+
+
+    # if selected_sprite.rank == Rank.Rank.pawn.value:
+    #     valid_moves = main.pawn_movement(pieces_in_play, piece)
+    # elif selected_sprite.rank == Rank.Rank.knight.value:
+    #     valid_moves = main.knight_movement(pieces_in_play, piece)
+    # elif selected_sprite.rank == Rank.Rank.bishop.value:
+    #     valid_moves = main.bishop_movement(pieces_in_play, piece)
+    # elif selected_sprite.rank == Rank.Rank.rook.value:
+    #     valid_moves = main.rook_movement(pieces_in_play, piece)
+    # elif selected_sprite.rank == Rank.Rank.queen.value:
+    #     valid_moves = main.queen_movement(pieces_in_play, piece)
+    # elif selected_sprite.rank == Rank.Rank.king.value:
+    #     valid_moves = main.king_movement(pieces_in_play, piece)  
+    # else:
+    #     raise Exception     
     
     return valid_moves
 
@@ -273,5 +289,22 @@ def revert_json_changes():
         print("Details:", e)
 
     return
+
+def is_in_check(king_to_be_checked_position: str, colour_to_be_checked: str, sprites_in_play: list[ClickableSprite.ClickableSprite]):
+    valid_moves = []
+
+    for sprite in sprites_in_play:
+        if sprite.colour != colour_to_be_checked:
+            sprite_valid_moves = get_valid_moves(sprite)
+            for move in sprite_valid_moves:
+                valid_moves.append(move)
+    for valid_move in valid_moves:
+        if valid_move == king_to_be_checked_position:
+            print("in check")
+            return True
+    print("not in check")
+    return False
+
     
+     
 

@@ -2,12 +2,12 @@
     "pieces": [
         {
             "name": "a1",
-            "colour": "black",
+            "colour": "white",
             "move_counter": 0
         },
         {
             "name": "a2",
-            "colour": "black",
+            "colour": "white",
             "move_counter": 0
         },
         {
