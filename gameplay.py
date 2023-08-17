@@ -60,6 +60,9 @@ def highlight_valid_moves(valid_moves):
 					squares_to_highlight.append(square)
 
 		for square in squares_to_highlight:
+			if square.piece_occupying == "king":
+				pygame.draw.rect(screen, (255, 0, 0), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) 
+				continue
 			pygame.draw.rect(screen, (230, 230, 230), pygame.Rect(square.top_left_x, square.top_left_y, 70, 70)) 
 
 def toggle_player_colour(current_player_colour: str):
@@ -93,6 +96,7 @@ def handle_clicks(self, *args, **kwargs):
 					selected_sprite = find_selected_sprite_from_clicked_square(group, clicked_square)
 					valid_moves_to_highlight = helpers.get_valid_moves(selected_sprite)
 					return valid_moves_to_highlight
+				
 				# test for whether we're on the second click, and whether there's a piece in the square being moved to
 				elif first_clicked_square is not None and clicked_square.piece_occupying != "":
 					# square to move to is occupied logic
@@ -109,8 +113,7 @@ def handle_clicks(self, *args, **kwargs):
 						group.remove(sprite_to_be_removed)
 						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
 
-
-						helpers.is_in_check("e1", "white", group)
+					
 						first_clicked_square = None
 						selected_sprite = None
 						current_player_colour = toggle_player_colour(current_player_colour)
@@ -140,13 +143,18 @@ def handle_clicks(self, *args, **kwargs):
 						selected_sprite.move_counter += 1
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
 						helpers.update_pieceInfojson(first_clicked_square.name, clicked_square.name)
-						helpers.is_in_check("e1", "white", group)
 
+						
 						first_clicked_square = None
 						selected_sprite = None
 						current_player_colour = toggle_player_colour(current_player_colour)
 
 						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
+
+						for piece in pieces_in_play:
+							if piece.rank == "king" and piece.colour == current_player_colour:
+								if helpers.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
+									return [f"{piece.x_position}{piece.y_position}"]
 
 def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x: int, clicked_square_centre_y: int):
 	"""Calls movement()
