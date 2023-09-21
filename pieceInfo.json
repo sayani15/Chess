@@ -2,12 +2,12 @@
     "pieces": [
         {
             "name": "a1",
-            "colour": "black",
+            "colour": "white",
             "move_counter": 0
         },
         {
             "name": "a2",
-            "colour": "black",
+            "colour": "white",
             "move_counter": 0
         },
         {
@@ -46,7 +46,7 @@
             "move_counter": 0
         },
         {
-            "name": "c2",
+            "name": "c4",
             "colour": "white",
             "move_counter": 0
         },
@@ -61,7 +61,7 @@
             "move_counter": 0
         },
         {
-            "name": "d1",
+            "name": "a4",
             "colour": "white",
             "move_counter": 0
         },
@@ -71,7 +71,7 @@
             "move_counter": 0
         },
         {
-            "name": "d7",
+            "name": "d5",
             "colour": "black",
             "move_counter": 0
         },

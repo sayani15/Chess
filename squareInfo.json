@@ -94,7 +94,7 @@
             "bottom_right_x": 285,
             "bottom_right_y": 145,
             "name": "d7",
-            "piece_occupying": "pawn"
+            "piece_occupying": ""
         },
         {
             "top_left_x": 284,
@@ -222,7 +222,7 @@
             "bottom_right_x": 284,
             "bottom_right_y": 279,
             "name": "d5",
-            "piece_occupying": ""
+            "piece_occupying": "pawn"
         },
         {
             "top_left_x": 287,
@@ -262,7 +262,7 @@
             "bottom_right_x": 87,
             "bottom_right_y": 345,
             "name": "a4",
-            "piece_occupying": ""
+            "piece_occupying": "queen"
         },
         {
             "top_left_x": 87,
@@ -278,7 +278,7 @@
             "bottom_right_x": 220,
             "bottom_right_y": 347,
             "name": "c4",
-            "piece_occupying": ""
+            "piece_occupying": "pawn"
         },
         {
             "top_left_x": 220,
@@ -406,7 +406,7 @@
             "bottom_right_x": 218,
             "bottom_right_y": 478,
             "name": "c2",
-            "piece_occupying": "pawn"
+            "piece_occupying": ""
         },
         {
             "top_left_x": 219,
@@ -478,7 +478,7 @@
             "bottom_right_x": 289,
             "bottom_right_y": 550,
             "name": "d1",
-            "piece_occupying": "queen"
+            "piece_occupying": ""
         },
         {
             "top_left_x": 285,

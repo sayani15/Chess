@@ -145,18 +145,24 @@ def handle_clicks(self, *args, **kwargs):
 						selected_sprite.move_counter += 1
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
 						helpers.update_pieceInfojson(first_clicked_square.name, clicked_square.name)
-
 						
 						first_clicked_square = None
 						selected_sprite = None
 						current_player_colour = toggle_player_colour(current_player_colour)
 
 						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
-
+						
 						for piece in pieces_in_play:
 							if piece.rank == "king" and piece.colour == current_player_colour:
 								if check_helper.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
+									check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play)
+									print("in check")
 									return [f"{piece.x_position}{piece.y_position}"]
+
+
+						
+
+
 
 def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x: int, clicked_square_centre_y: int):
 	"""Calls movement()
