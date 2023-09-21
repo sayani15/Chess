@@ -153,7 +153,7 @@ def converts_letter_to_number(letter: str):
         letter (str): The letter to be converted to a number.
 
     Returns:
-        letters_numbers_dict (dict): A dictionary of numbers to letters. (a-h/1-8)
+        letters_numbers_dict[letter.lower()] (int): The number value of the letter key.
     """
     letters_numbers_dict = {"a": 1, "b": 2, "c": 3, "d": 4, "e": 5, "f": 6, "g": 7, "h": 8}
 

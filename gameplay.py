@@ -2,6 +2,7 @@ import pygame
 from clickable_sprite import ClickableSprite
 import rank as Rank
 import helpers
+import check_helper
 import square as Square
 from typing import List
 import piece as Piece
@@ -85,6 +86,7 @@ def handle_clicks(self, *args, **kwargs):
 				print(clicked_pos_x, clicked_pos_y)
 				squares = helpers.update_squares_from_json()
 				pieces_in_play = helpers.get_pieces_in_play_from_json()
+				
 				clicked_square = find_clicked_square(clicked_pos_x, clicked_pos_y, squares)
 				clicked_piece = main.get_piece_in_the_square(clicked_square.name[0], clicked_square.name[1], pieces_in_play)
 			
@@ -153,7 +155,7 @@ def handle_clicks(self, *args, **kwargs):
 
 						for piece in pieces_in_play:
 							if piece.rank == "king" and piece.colour == current_player_colour:
-								if helpers.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
+								if check_helper.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
 									return [f"{piece.x_position}{piece.y_position}"]
 
 def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x: int, clicked_square_centre_y: int):
