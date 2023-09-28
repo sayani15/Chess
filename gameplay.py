@@ -11,6 +11,7 @@ import json
 import numpy as np
 import PieceSprite as ps
 
+  
 
 click_counter = 0
 selected_sprite = None
@@ -82,6 +83,8 @@ def handle_clicks(self, *args, **kwargs):
 			finally:
 				global first_clicked_square
 				global current_player_colour
+				global is_white_in_check
+				global is_black_in_check
 				clicked_pos_x, clicked_pos_y = events[0].pos[0], events[0].pos[1]
 				print(clicked_pos_x, clicked_pos_y)
 				squares = helpers.update_squares_from_json()
@@ -151,13 +154,17 @@ def handle_clicks(self, *args, **kwargs):
 						current_player_colour = toggle_player_colour(current_player_colour)
 
 						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
-						
+						pieces_in_play = helpers.get_pieces_in_play_from_json()
+						clicked_piece = main.get_piece_in_the_square(clicked_square.name[0], clicked_square.name[1], pieces_in_play)
+
 						for piece in pieces_in_play:
 							if piece.rank == "king" and piece.colour == current_player_colour:
 								if check_helper.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
 									check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play)
 									print("in check")
-									return [f"{piece.x_position}{piece.y_position}"]
+									moves_to_get_out_of_check = []
+									for move in check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play):
+										return [f"{piece.x_position}{piece.y_position}"]
 
 
 						
@@ -177,8 +184,6 @@ def on_click(selected_sprite: pygame.sprite, clicked_square_centre_x: int, click
 pygame.init()
 screen = pygame.display.set_mode((570, 570))
 pygame.display.flip()
-
-first_clicked_square = None
 
 group = pygame.sprite.RenderPlain()
 
@@ -261,7 +266,13 @@ def load_graphics():
 
 group = load_graphics()
 screen.blit(pygame.image.load("chessboard.png"), [0, 0])
+
+# Globals
 current_player_colour = "white"
+first_clicked_square = None
+
+is_white_in_check = False
+is_black_in_check = False
 
 running = True
 helpers.revert_json_changes()

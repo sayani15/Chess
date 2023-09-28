@@ -12,7 +12,7 @@ import clickable_sprite as ClickableSprite
     
 
 
-def get_valid_moves_for_piece_object(selected_piece: Piece.Piece) -> list[str]: 
+def get_valid_moves_for_piece_object(selected_piece: Piece.Piece, pieces_in_play) -> list[str]: 
     
     """Finds the rank of the player's selected sprite and returns the valid moves for it in its current position.
 
@@ -25,24 +25,43 @@ def get_valid_moves_for_piece_object(selected_piece: Piece.Piece) -> list[str]:
     Returns:
         valid_moves (list) : List of available moves for the sprite piece.
     """
-    movement_functions = {
-        Rank.Rank.pawn.value: main.pawn_movement,
-        Rank.Rank.knight.value: main.knight_movement,
-        Rank.Rank.bishop.value: main.bishop_movement,
-        Rank.Rank.rook.value: main.rook_movement,
-        Rank.Rank.queen.value: main.queen_movement,
-        Rank.Rank.king.value: main.king_movement,
-    }
+    # movement_functions = {
+    #     Rank.Rank.pawn.value: main.pawn_movement,
+    #     Rank.Rank.knight.value: main.knight_movement,
+    #     Rank.Rank.bishop.value: main.bishop_movement,
+    #     Rank.Rank.rook.value: main.rook_movement,
+    #     Rank.Rank.queen.value: main.queen_movement,
+    #     Rank.Rank.king.value: main.king_movement,
+    # }
 
-    if selected_piece.rank not in movement_functions:
-        raise Exception
+    # if selected_piece.rank not in movement_functions.values:
+    #     raise Exception
 
-    pieces_in_play = get_pieces_in_play_from_json()
-    piece = Piece.Piece(selected_piece.colour, selected_piece.x_position, int(selected_piece.y_position), selected_piece.rank, selected_piece.move_counter)
+    # pieces_in_play = get_pieces_in_play_from_json()
+    # piece = Piece.Piece(selected_piece.colour, selected_piece.x_position, int(selected_piece.y_position), selected_piece.rank, selected_piece.move_counter)
 
-    valid_moves = movement_functions[selected_piece.rank](pieces_in_play, piece)
+    # valid_moves = movement_functions[selected_piece.rank](pieces_in_play, piece)
   
+    # return valid_moves
+
+    
+    if selected_piece.rank == Rank.Rank.pawn.name:
+        valid_moves = main.pawn_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.knight.name:
+        valid_moves = main.knight_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.bishop.name:
+        valid_moves = main.bishop_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.rook.name:
+        valid_moves = main.rook_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.queen.name:
+        valid_moves = main.queen_movement(pieces_in_play, selected_piece)
+    elif selected_piece.rank == Rank.Rank.king.name:
+        valid_moves = main.king_movement(pieces_in_play, selected_piece)  
+    else:
+        raise Exception     
+    
     return valid_moves
+
 
 def get_valid_moves(selected_sprite: ClickableSprite.ClickableSprite) -> list[str]: 
     """Finds the rank of the player's selected sprite and returns the valid moves for it in its current position.
@@ -68,6 +87,7 @@ def get_valid_moves(selected_sprite: ClickableSprite.ClickableSprite) -> list[st
     if selected_sprite.rank not in movement_functions:
         raise Exception
 
+
     if selected_sprite is not None:
         pieces_in_play = get_pieces_in_play_from_json()
         clicked_square_name = find_clicked_square((selected_sprite.rect.centerx, selected_sprite.rect.centery), get_squares())
@@ -77,8 +97,9 @@ def get_valid_moves(selected_sprite: ClickableSprite.ClickableSprite) -> list[st
         return valid_moves
     else:
         raise Exception
-
     
+
+
 
 def find_clicked_square(coordinates: tuple, squares: List[Square.Square]) -> str: 
     """Finds the name of the square when given coordinates of position.
