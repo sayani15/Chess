@@ -24,15 +24,15 @@ def is_in_check(king_to_be_checked_position: str, colour_to_be_checked: str, spr
     return False
 
 
-def find_pieces_to_take_checking_piece(king_in_check: Piece.Piece, piece_checking_king: Piece.Piece, pieces_in_play: list[Piece.Piece]):
+def find_pieces_to_take_checking_piece(piece_checking_king: Piece.Piece, pieces_in_play: list[Piece.Piece]):
     pieces_that_can_take = []
     
     for piece in pieces_in_play:
         if piece.colour != piece_checking_king.colour:
-            piece_valid_moves = helpers.get_valid_moves(piece)
+            piece_valid_moves = helpers.get_valid_moves_for_piece_object(piece, pieces_in_play)
             for valid_move in piece_valid_moves:
-                if valid_move == piece_checking_king:
-                    pieces_that_can_take.append(piece)
+                if valid_move == f"{piece_checking_king.x_position}{piece_checking_king.y_position}":
+                    pieces_that_can_take.append(AvoidCheckPiece.AvoidCheckPiece(piece, [valid_move]))   #TODO: Verify that there will only ever be one valid move
                     
     return pieces_that_can_take 
 
@@ -90,31 +90,43 @@ def find_pieces_to_block_check(king_in_check: Piece.Piece, piece_checking_king: 
                         if vm == square:
                             pieces_to_enable_blocking.append(piece)         
     
-    # for index, piece, piece_valid_moves in enumerate(all_valid_moves.items()):
-    #     moves_to_enable_blocking = all_valid_moves[pieces_to_enable_blocking[index]]
-    #     pieces_to_enable_blocking.append(AvoidCheckPiece.AvoidCheckPiece(piece, moves_to_enable_blocking))
+    partial_result = []     
+    for piece in pieces_to_enable_blocking:
+        partial_result.append(AvoidCheckPiece.AvoidCheckPiece(piece, all_valid_moves[piece]))
 
     result = []
-    for piece in pieces_to_enable_blocking:
-        result.append(AvoidCheckPiece.AvoidCheckPiece(piece, all_valid_moves[piece]))
 
-    for r in result:
-        vms = r.valid_moves
+    #filters the relevant valid moves from the useless ones
+    for r in partial_result:
+        vms = []
         for v in r.valid_moves:
-            if v not in squares_to_block_check:
-                vms.remove(v)
-        r.valid_moves = vms
+            if v in squares_to_block_check:   
+                vms.append(v)
+        result.append(AvoidCheckPiece.AvoidCheckPiece(r.piece, vms)) 
+               
     
+
+    return result   
+
+def run_to_avoid_checkmate(king_in_check: Piece.Piece, piece_checking_king: Piece.Piece, pieces_in_play: list[Piece.Piece]):
+    all_valid_moves = {}
+    king_valid_moves = main.king_movement(pieces_in_play, king_in_check)
+
+    for piece in pieces_in_play:
+        if piece.colour != piece_checking_king.colour and piece.rank != king_in_check.rank:
+            piece_valid_moves = helpers.get_valid_moves_for_piece_object(piece, pieces_in_play) # list of valid moves for piece
+            all_valid_moves.update({piece : piece_valid_moves})
+
+    result = []
+    v = []
+    for vm in king_valid_moves:
+        for i in all_valid_moves.values():
+            if vm != i:
+                v.append(vm)
+    result.append(AvoidCheckPiece.AvoidCheckPiece(king_in_check, v))    
 
     return result      
 
-def run_to_avoid_checkmate():
-    #TODO: Write method
-    return            
-
-t = -5
-for i in np.arange(1, t):
-    print(i)
 
 
 

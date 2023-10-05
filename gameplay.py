@@ -160,11 +160,13 @@ def handle_clicks(self, *args, **kwargs):
 						for piece in pieces_in_play:
 							if piece.rank == "king" and piece.colour == current_player_colour:
 								if check_helper.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
-									check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play)
+									# block_check_pieces = check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play)
+									# pieces_to_take_checking_piece = check_helper.find_pieces_to_take_checking_piece(clicked_piece, pieces_in_play)
+									evade_capture_moves = check_helper.run_to_avoid_checkmate(piece, clicked_piece, pieces_in_play)
 									print("in check")
 									moves_to_get_out_of_check = []
-									for move in check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play):
-										return [f"{piece.x_position}{piece.y_position}"]
+									# for move in check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play):
+									# 	return [f"{piece.x_position}{piece.y_position}"]
 
 
 						
