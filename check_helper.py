@@ -9,6 +9,16 @@ import numpy as np
 
 
 def is_in_check(king_to_be_checked_position: str, colour_to_be_checked: str, sprites_in_play: list[ClickableSprite.ClickableSprite]):
+    """Checks if the king is in check or not.
+
+    Args:
+        king_to_be_checked_position (str): The position of the king that is being threatened by a check.
+        colour_to_be_checked (str): The colour of the king to be checked.
+        sprites_in_play (list[ClickableSprite.ClickableSprite]): A list of all the ClickableSprites currently on the board.
+
+    Returns:
+        bool: True if the king is in check, false if not.
+    """
     valid_moves = []
 
     for sprite in sprites_in_play:
@@ -23,20 +33,38 @@ def is_in_check(king_to_be_checked_position: str, colour_to_be_checked: str, spr
     print("not in check")
     return False
 
-
 def find_pieces_to_take_checking_piece(piece_checking_king: Piece.Piece, pieces_in_play: list[Piece.Piece]):
-    pieces_that_can_take = []
+    """Finds pieces that can take the checking piece
+
+    Args:
+        piece_checking_king (Piece.Piece): _description_
+        pieces_in_play (list[Piece.Piece]): _description_
+
+    Returns:
+        result (list[AvoidCheckPiece]): (piece that can take, valid_move - which will be the position of the checking piece (probably?))
+    """
+    result = []
     
     for piece in pieces_in_play:
         if piece.colour != piece_checking_king.colour:
             piece_valid_moves = helpers.get_valid_moves_for_piece_object(piece, pieces_in_play)
             for valid_move in piece_valid_moves:
                 if valid_move == f"{piece_checking_king.x_position}{piece_checking_king.y_position}":
-                    pieces_that_can_take.append(AvoidCheckPiece.AvoidCheckPiece(piece, [valid_move]))   #TODO: Verify that there will only ever be one valid move
+                    result.append(AvoidCheckPiece.AvoidCheckPiece(piece, [valid_move]))   #TODO: Verify that there will only ever be one valid move
                     
-    return pieces_that_can_take 
+    return result 
 
 def find_pieces_to_block_check(king_in_check: Piece.Piece, piece_checking_king: Piece.Piece, pieces_in_play: list[Piece.Piece]): 
+    """Finds pieces from the checked side to take the checking piece.
+
+    Args:
+        king_in_check (Piece.Piece): King being checked
+        piece_checking_king (Piece.Piece): The piece on the checking side attacking the king.
+        pieces_in_play (list[Piece.Piece]): A list of all the pieces currently on the board.
+
+    Returns:
+        result (list[AvoidCheckPiece]): A list of AvoidCheckPiece (piece to block, list of moves it can go to to block)
+    """
     all_valid_moves = {}
     
     for piece in pieces_in_play:
@@ -90,7 +118,9 @@ def find_pieces_to_block_check(king_in_check: Piece.Piece, piece_checking_king: 
                         if vm == square:
                             pieces_to_enable_blocking.append(piece)         
     
-    partial_result = []     
+
+    partial_result = []     # list[AvoidCheckPiece]: contains all the pieces that can block the check, 
+                            # but the valid_moves of each piece are not filtered yet to only include moves that will block the check
     for piece in pieces_to_enable_blocking:
         partial_result.append(AvoidCheckPiece.AvoidCheckPiece(piece, all_valid_moves[piece]))
 
@@ -98,32 +128,36 @@ def find_pieces_to_block_check(king_in_check: Piece.Piece, piece_checking_king: 
 
     #filters the relevant valid moves from the useless ones
     for r in partial_result:
-        vms = []
-        for v in r.valid_moves:
-            if v in squares_to_block_check:   
-                vms.append(v)
-        result.append(AvoidCheckPiece.AvoidCheckPiece(r.piece, vms)) 
+        relevant_vms = []
+        for valid_move in r.valid_moves:
+            if valid_move in squares_to_block_check:   
+                relevant_vms.append(valid_move)
+        result.append(AvoidCheckPiece.AvoidCheckPiece(r.piece, relevant_vms)) 
                
-    
-
     return result   
 
-def run_to_avoid_checkmate(king_in_check: Piece.Piece, piece_checking_king: Piece.Piece, pieces_in_play: list[Piece.Piece]):
-    all_valid_moves = {}
+def run_to_avoid_checkmate(king_in_check: Piece.Piece, pieces_in_play: list[Piece.Piece], sprites_in_play):
+    """Finds moves for the checked king to move to to evade check.
+
+    Args:
+        king_in_check (Piece.Piece): _description_
+        pieces_in_play (list[Piece.Piece]): _description_
+        sprites_in_play (_type_): _description_
+
+    Returns:
+        result (list[AvoidCheckPiece]): A list of AvoidCheckPiece - 
+    """
     king_valid_moves = main.king_movement(pieces_in_play, king_in_check)
 
-    for piece in pieces_in_play:
-        if piece.colour != piece_checking_king.colour and piece.rank != king_in_check.rank:
-            piece_valid_moves = helpers.get_valid_moves_for_piece_object(piece, pieces_in_play) # list of valid moves for piece
-            all_valid_moves.update({piece : piece_valid_moves})
-
     result = []
-    v = []
-    for vm in king_valid_moves:
-        for i in all_valid_moves.values():
-            if vm != i:
-                v.append(vm)
+    v = []  
+
+    for king_vm in king_valid_moves:
+        if not is_in_check(king_vm, king_in_check.colour, sprites_in_play):
+            v.append(king_vm)
+
     result.append(AvoidCheckPiece.AvoidCheckPiece(king_in_check, v))    
+
 
     return result      
 
