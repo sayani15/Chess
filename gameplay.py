@@ -10,6 +10,7 @@ import main
 import json
 import numpy as np
 import PieceSprite as ps
+import MoveHistoryModel as MoveHistoryModel
 
   
 
@@ -50,8 +51,7 @@ def find_clicked_square(clicked_pos_x: int, clicked_pos_y: int, squares: List[Sq
         	clicked_pos_y > square.top_left_y and clicked_pos_y < square.bottom_right_y:
             return square
 
-def highlight_valid_moves(valid_moves):
-	
+def highlight_valid_moves(valid_moves):	
 	squares_to_highlight = []
 	squares = helpers.update_squares_from_json()
 
@@ -85,6 +85,8 @@ def handle_clicks(self, *args, **kwargs):
 				global current_player_colour
 				global is_white_in_check
 				global is_black_in_check
+				global move_history		# so that we can get piece_checking_king
+
 				clicked_pos_x, clicked_pos_y = events[0].pos[0], events[0].pos[1]
 				print(clicked_pos_x, clicked_pos_y)
 				squares = helpers.update_squares_from_json()
@@ -93,13 +95,42 @@ def handle_clicks(self, *args, **kwargs):
 				clicked_square = find_clicked_square(clicked_pos_x, clicked_pos_y, squares)
 				clicked_piece = main.get_piece_in_the_square(clicked_square.name[0], clicked_square.name[1], pieces_in_play)
 			
+				# setting up whose in check
+				for piece in pieces_in_play:
+					if piece.rank == "king" and piece.colour == current_player_colour:
+						if check_helper.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
+							king_in_check = piece
+							if current_player_colour == "white":
+								is_white_in_check, is_black_in_check = True, False
+								break
+							else:
+								is_white_in_check, is_black_in_check = False, True
+								break
+
+							
 				# test for whether we're on the first click, and whether the user has clicked on a square with a piece in it			
-				if first_clicked_square is None and clicked_square.piece_occupying != "" and current_player_colour == clicked_piece.colour:			
+				if first_clicked_square is None and clicked_square.piece_occupying != "" and current_player_colour == clicked_piece.colour:	
+					if is_white_in_check or is_black_in_check:
+						valid_move_pieces = []
+						moves_to_get_out_of_check = [check_helper.find_pieces_to_block_check(king_in_check, move_history[-1].piece, pieces_in_play), # AvoidCheckPieces to block check
+													check_helper.find_pieces_to_take_checking_piece(move_history[-1].piece, pieces_in_play), # AvoidCheckPieces to take checking piece
+													check_helper.run_to_avoid_checkmate(king_in_check, pieces_in_play, group)]	# AvoidCheckPieces to avoid check
+							
+						flat_moves_to_get_out_of_check = [item for sublist in moves_to_get_out_of_check for item in sublist]	#converts list of lists into 1 list
+
+						for move in flat_moves_to_get_out_of_check:
+							valid_move_pieces.append(move.piece)
+						if clicked_piece not in valid_move_pieces:
+							return
+						else:
+							selected_piece_moves = [x for x in flat_moves_to_get_out_of_check if x.piece == clicked_piece][0]
+							return selected_piece_moves.valid_moves
 					first_clicked_square = clicked_square
 					# find and highlight required squares
 					print("first click")
 					selected_sprite = find_selected_sprite_from_clicked_square(group, clicked_square)
 					valid_moves_to_highlight = helpers.get_valid_moves(selected_sprite)
+
 					return valid_moves_to_highlight
 				
 				# test for whether we're on the second click, and whether there's a piece in the square being moved to
@@ -117,6 +148,8 @@ def handle_clicks(self, *args, **kwargs):
 						sprite_to_be_removed = find_selected_sprite_from_clicked_square(group, clicked_square)
 						group.remove(sprite_to_be_removed)
 						on_click(selected_sprite, clicked_square_centre_x, clicked_square_centre_y)
+
+						move_history.append(MoveHistoryModel.MoveHistoryModel(first_clicked_square.name, clicked_square.name, clicked_piece))
 
 					
 						first_clicked_square = None
@@ -149,24 +182,30 @@ def handle_clicks(self, *args, **kwargs):
 						helpers.update_squareInfojson(first_clicked_square.name, Rank.Rank(selected_sprite.rank).name, clicked_square.name)
 						helpers.update_pieceInfojson(first_clicked_square.name, clicked_square.name)
 						
-						first_clicked_square = None
-						selected_sprite = None
-						current_player_colour = toggle_player_colour(current_player_colour)
-
 						screen.blit(pygame.image.load("chessboard.png"), [0, 0])
 						pieces_in_play = helpers.get_pieces_in_play_from_json()
 						clicked_piece = main.get_piece_in_the_square(clicked_square.name[0], clicked_square.name[1], pieces_in_play)
 
-						for piece in pieces_in_play:
-							if piece.rank == "king" and piece.colour == current_player_colour:
-								if check_helper.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
-									# block_check_pieces = check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play)
-									# pieces_to_take_checking_piece = check_helper.find_pieces_to_take_checking_piece(clicked_piece, pieces_in_play)
-									evade_capture_moves = check_helper.run_to_avoid_checkmate(piece, clicked_piece, pieces_in_play)
-									print("in check")
-									moves_to_get_out_of_check = []
-									# for move in check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play):
-									# 	return [f"{piece.x_position}{piece.y_position}"]
+						move_history.append(MoveHistoryModel.MoveHistoryModel(first_clicked_square.name, clicked_square.name, clicked_piece))
+
+
+						first_clicked_square = None
+						selected_sprite = None
+						current_player_colour = toggle_player_colour(current_player_colour)
+
+						
+
+						# for piece in pieces_in_play:
+						# 	if piece.rank == "king" and piece.colour == current_player_colour:
+						# 		if check_helper.is_in_check(f"{piece.x_position}{piece.y_position}", current_player_colour, group):
+									
+						# 			print("in check")
+						# 			moves_to_get_out_of_check = [check_helper.find_pieces_to_block_check(piece, move_history[-1], pieces_in_play), # AvoidCheckPieces to block check
+						# 			  							check_helper.find_pieces_to_take_checking_piece(move_history[-1], pieces_in_play), # AvoidCheckPieces to take checking piece
+						# 			  							check_helper.run_to_avoid_checkmate(piece, pieces_in_play, group)]	# AvoidCheckPieces to avoid check
+						# 			# for move in check_helper.find_pieces_to_block_check(piece, clicked_piece, pieces_in_play):
+						# 			# 	return [f"{piece.x_position}{piece.y_position}"]
+
 
 
 						
@@ -275,6 +314,8 @@ first_clicked_square = None
 
 is_white_in_check = False
 is_black_in_check = False
+
+move_history = []
 
 running = True
 helpers.revert_json_changes()

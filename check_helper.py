@@ -137,6 +137,7 @@ def find_pieces_to_block_check(king_in_check: Piece.Piece, piece_checking_king: 
     return result   
 
 def run_to_avoid_checkmate(king_in_check: Piece.Piece, pieces_in_play: list[Piece.Piece], sprites_in_play):
+    #TODO: Fix accepting a blank list as valid_moves in result
     """Finds moves for the checked king to move to to evade check.
 
     Args:

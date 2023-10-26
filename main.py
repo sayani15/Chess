@@ -197,7 +197,6 @@ def pawn_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     :param piece: The item of list pieces that pawn_movement is currently finding valid moves for.
     :return: valid_moves: A list of all the valid pawn moves for the player in that position.
     """
-    print("pawn movement")
     valid_moves = []
     colour = piece.colour
     # TODO Implement en passant.
@@ -287,7 +286,6 @@ def knight_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     :return: valid_moves: A list of all the valid knight moves for the player in that position.
     """
     valid_moves = []
-    print("knight movement")
     # +2 y_pos, +1 x_pos
     # if examine_x_positions(piece.x_position, 1) != False:  # examine_x_positions returns false if the position is off the board
     if not is_square_occupied(pieces, examine_x_positions(piece.x_position, 1), piece.y_position + 2) and \
@@ -404,7 +402,6 @@ def rook_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     :param piece: The item of list pieces that rook_movement is currently finding valid moves for.
     :return: valid_moves: A list of all the valid rook moves for the player in that position.
     """
-    print("rook movement")
     # TODO: castling
     valid_moves = []
 
@@ -475,7 +472,6 @@ def king_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     :param piece: The item of list pieces that king_movement is currently finding valid moves for.
     :return: valid_moves: A list of all the valid king moves for the player in that position.
     """
-    print("king movement")
     # TODO: castling
     valid_moves = []
 
@@ -594,7 +590,6 @@ def bishop_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     :param piece: The item of list pieces that bishop_movement is currently finding valid moves for.
     :return: valid_moves: A list of all the valid bishop moves for the player in that position.
     """
-    print("bishop movement")
     valid_moves = []
     squares_to_top = 8 - piece.y_position
     squares_to_bottom = piece.y_position - 1
@@ -669,7 +664,6 @@ def queen_movement(pieces: List[Piece.Piece], piece: Piece.Piece):
     :param piece: The item of list pieces that queen_movement is currently finding valid moves for.
     :return: valid_moves: A list of all the valid queen moves for the player in that position.
     """
-    print("queen movement")
     valid_moves = []
 
     # STRAIGHT
