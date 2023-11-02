@@ -82,7 +82,7 @@ def find_pieces_to_block_check(king_in_check: Piece.Piece, piece_checking_king: 
         king_in_check_x, piece_checking_king_x = main.converts_letter_to_number(king_in_check.x_position),  main.converts_letter_to_number(piece_checking_king.x_position)
         squares_to_king_x = king_in_check_x - piece_checking_king_x 
         squares_to_king_y = king_in_check.y_position - piece_checking_king.y_position 
-        squares_to_block_check = []
+        squares_to_block_check = [] # A list of square names 
 
         if squares_to_king_y < squares_to_king_x:
             for i in np.arange(1, squares_to_king_x):
@@ -141,12 +141,12 @@ def run_to_avoid_checkmate(king_in_check: Piece.Piece, pieces_in_play: list[Piec
     """Finds moves for the checked king to move to to evade check.
 
     Args:
-        king_in_check (Piece.Piece): _description_
-        pieces_in_play (list[Piece.Piece]): _description_
-        sprites_in_play (_type_): _description_
+        king_in_check (Piece.Piece): the king being checked
+        pieces_in_play (list[Piece.Piece]): Pieces currently on the board
+        sprites_in_play (list[ClickableSprite]): List of sprites currently on the board
 
     Returns:
-        result (list[AvoidCheckPiece]): A list of AvoidCheckPiece - 
+        result (list[AvoidCheckPiece]): A list of AvoidCheckPiece 
     """
     king_valid_moves = main.king_movement(pieces_in_play, king_in_check)
 
